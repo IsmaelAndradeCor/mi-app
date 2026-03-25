@@ -4,22 +4,24 @@ export interface Producto {
   codigo: string;
   nombre: string;
   descripcion: string | null;
-  precio: number;
+  precioCompra: number;     // ← NUEVO: Costo real de compra
+  precioVenta: number;      // ← NUEVO: Precio al público (antes era solo "precio")
   stock: number;
   stockMinimo: number;
   categoria: string | null;
   proveedor: string | null;
-  fechaCreacion: string;  // ISO date string
+  fechaCreacion: string;
 }
 
-// datos-mock.ts
+// datos-mock.ts - COMPLETO con precios de compra/venta
 export const productosMock: Producto[] = [
   {
     id: 1,
     codigo: 'ART001',
     nombre: 'Laptop Dell Inspiron',
     descripcion: '15" i5 8GB SSD',
-    precio: 15000.00,
+    precioCompra: 12000.00,   // 💵 Costo real
+    precioVenta: 15000.00,    // 💰 Precio público
     stock: 5,
     stockMinimo: 2,
     categoria: 'Electrónicos',
@@ -31,7 +33,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART002',
     nombre: 'Mouse Logitech',
     descripcion: 'Óptico inalámbrico',
-    precio: 250.00,
+    precioCompra: 180.00,
+    precioVenta: 250.00,
     stock: 20,
     stockMinimo: 5,
     categoria: 'Electrónicos',
@@ -43,7 +46,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART003',
     nombre: 'Teclado Mecánico',
     descripcion: 'RGB USB',
-    precio: 800.00,
+    precioCompra: 600.00,
+    precioVenta: 800.00,
     stock: 10,
     stockMinimo: 3,
     categoria: 'Electrónicos',
@@ -55,7 +59,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART004',
     nombre: 'Monitor 24"',
     descripcion: 'Full HD IPS',
-    precio: 4500.00,
+    precioCompra: 3600.00,
+    precioVenta: 4500.00,
     stock: 8,
     stockMinimo: 2,
     categoria: 'Electrónicos',
@@ -67,7 +72,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART005',
     nombre: 'Impresora HP',
     descripcion: 'Laser B/N',
-    precio: 3000.00,
+    precioCompra: 2400.00,
+    precioVenta: 3000.00,
     stock: 3,
     stockMinimo: 1,
     categoria: 'Electrónicos',
@@ -79,7 +85,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART006',
     nombre: 'Cuaderno 100hjs',
     descripcion: 'Rayado A4',
-    precio: 25.00,
+    precioCompra: 18.00,
+    precioVenta: 25.00,
     stock: 100,
     stockMinimo: 20,
     categoria: 'Papelería',
@@ -91,7 +98,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART007',
     nombre: 'Bolígrafo Pilot',
     descripcion: 'Azul pack 12',
-    precio: 50.00,
+    precioCompra: 36.00,
+    precioVenta: 50.00,
     stock: 50,
     stockMinimo: 10,
     categoria: 'Papelería',
@@ -103,7 +111,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART008',
     nombre: 'Carpetas Plásticas',
     descripcion: 'A4 transparentes pack 5',
-    precio: 80.00,
+    precioCompra: 60.00,
+    precioVenta: 80.00,
     stock: 30,
     stockMinimo: 10,
     categoria: 'Papelería',
@@ -115,7 +124,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART009',
     nombre: 'Arroz 1kg',
     descripcion: 'Blanco integral',
-    precio: 20.00,
+    precioCompra: 15.00,
+    precioVenta: 20.00,
     stock: 40,
     stockMinimo: 10,
     categoria: 'Alimentos',
@@ -127,7 +137,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART010',
     nombre: 'Aceite 900ml',
     descripcion: 'Vegetal',
-    precio: 35.00,
+    precioCompra: 28.00,
+    precioVenta: 35.00,
     stock: 25,
     stockMinimo: 5,
     categoria: 'Alimentos',
@@ -139,7 +150,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART011',
     nombre: 'Refresco 2L',
     descripcion: 'Coca Cola',
-    precio: 18.00,
+    precioCompra: 14.00,
+    precioVenta: 18.00,
     stock: 60,
     stockMinimo: 15,
     categoria: 'Bebidas',
@@ -151,7 +163,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART012',
     nombre: 'Jabón Dove',
     descripcion: 'Pack 4 barras',
-    precio: 45.00,
+    precioCompra: 35.00,
+    precioVenta: 45.00,
     stock: 15,
     stockMinimo: 5,
     categoria: 'Higiene',
@@ -163,7 +176,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART013',
     nombre: 'Pasta Dental',
     descripcion: 'Colgate 180g',
-    precio: 30.00,
+    precioCompra: 24.00,
+    precioVenta: 30.00,
     stock: 35,
     stockMinimo: 10,
     categoria: 'Higiene',
@@ -175,7 +189,8 @@ export const productosMock: Producto[] = [
     codigo: 'ART014',
     nombre: 'Camisa Polo',
     descripcion: 'Algodón M',
-    precio: 400.00,
+    precioCompra: 300.00,
+    precioVenta: 400.00,
     stock: 12,
     stockMinimo: 3,
     categoria: 'Ropa',
@@ -185,18 +200,21 @@ export const productosMock: Producto[] = [
   {
     id: 15,
     codigo: 'ART015',
-    nombre: 'Jeans Levi\'s',
+    nombre: "Jeans Levi's",
     descripcion: 'Slim 32x32',
-    precio: 1200.00,
+    precioCompra: 900.00,
+    precioVenta: 1200.00,
     stock: 6,
     stockMinimo: 2,
     categoria: 'Ropa',
-    proveedor: 'Levi\'s',
+    proveedor: "Levi's",
     fechaCreacion: '2026-03-23T12:00:00Z'
   }
 ];
+
 
 // Función util para filtrar bajos en stock
 export const getProductosBajoStock = (productos: Producto[]): Producto[] => {
   return productos.filter(p => p.stock <= p.stockMinimo);
 };
+
