@@ -1,14 +1,14 @@
 <h2>Listado de Productos</h2>
 <div class="form-section">
     <div class="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-3">
-        @for (item of productos; track $index) {
+        @for (item of productosDto; track $index) {
         <div class="col">
             <div class="card">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     {{item.nombre}}
                     <div>
                         <button class="btn btn-danger me-2" (click)="eliminarProductoPorCodigo(item.codigo)"><i class="fa-solid fa-trash"></i></button> <!-- Eliminar -->
-                        <button class="btn btn-warning" (click)="actualizarProductoPorCodigo(item.codigo)"><i class="fa-solid fa-pen-to-square"></i></button> <!-- Editar -->
+                        <button class="btn btn-warning" (click)="abrirModalActualizarProductoPorCodigo(item.codigo)"><i class="fa-solid fa-pen-to-square"></i></button> <!-- Editar -->
                     </div>
                     
                 </div>

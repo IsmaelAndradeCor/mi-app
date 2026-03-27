@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { productosMock, Producto } from '../../../models/producto.interface';
+import { ProductoDto } from '../../../models/producto.interface';
 import { ActualizarProductoComponent } from '../actualizar-producto/actualizar-producto.component';
 import { CommonModule } from '@angular/common';
+import { ProductoService } from '../../../services/producto.service';
 
 // // Simular API
 // const fetchProductos = async (): Promise<Producto[]> => {
@@ -17,35 +18,60 @@ import { CommonModule } from '@angular/common';
 
 export class ListarProductosComponent implements OnInit {
 
-  productos: Producto[] = productosMock;
-  productoActualizar: Producto | null = null;;
+  constructor(
+    private productoService: ProductoService
+  ){}
+
+  productosDto: ProductoDto[] = [];
+  productoActualizar: ProductoDto | null = null;;
   mostrarActualizarProducto: boolean = false;
 
-  productosPorCodigo: Map<string, Producto> = new Map();  // ← Tu diccionario
+  productosPorCodigo: Map<string, ProductoDto> = new Map();  // ← Tu diccionario
   
   ngOnInit() {
     // Convierte el arreglo a Map UNA SOLA VEZ al cargar
-    this.productosPorCodigo = new Map(
-      this.productos.map(producto => [producto.codigo, producto])
-    );
-    
-    console.log('Map creado con', this.productosPorCodigo.size, 'productos');
+
+    this.productoService.getProductos().subscribe({
+      next:(prodcutosResponse) => {
+        this.productosDto = prodcutosResponse;
+
+        this.productosPorCodigo = new Map(
+          this.productosDto.map(producto => [producto.codigo, producto])
+        );
+        
+        console.log('Map creado con', this.productosPorCodigo.size, 'productos');
+      }
+    });
   }
 
   eliminarProductoPorCodigo(codigo: string): void {
-    // 1. Eliminar del Map (rápido)
-    this.productosPorCodigo.delete(codigo);
 
-    // 2. Recrear el array sin ese producto
-    this.productos = this.productos.filter(x => x.codigo !== codigo);
+    this.productoService.deleteProducto(codigo).subscribe({
+      next:() => {
+        // 1. Eliminar del Map (rápido)
+        this.productosPorCodigo.delete(codigo);
 
+        // 2. Recrear el array sin ese producto
+        this.productosDto = this.productosDto.filter(x => x.codigo !== codigo);
+      },
+      error: (error) => {
+        console.error('Error eliminando producto:', error);
+      }
+    });
     console.log('Producto Eliminado');
   }
 
-  actualizarProductoPorCodigo(codigo: string): void {
-    // Busca y asigna el producto
-    this.productoActualizar = this.productos.find(p => p.codigo === codigo) || null;
-    this.mostrarActualizarProducto = true;
+  abrirModalActualizarProductoPorCodigo(codigo: string): void {
+    // Llama al servicio en lugar de find()
+    this.productoService.getProductoPorCodigo(codigo).subscribe({
+      next: (producto) => {
+        this.productoActualizar = producto;
+        this.mostrarActualizarProducto = true;
+      },
+      error: (error) => {
+        console.error('Error obteniendo producto:', error);
+      }
+    });
   }
 
   cerrarModal(): void {

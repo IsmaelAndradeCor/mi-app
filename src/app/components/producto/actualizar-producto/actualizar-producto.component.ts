@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';  // Para ngModel
-import { Producto } from '../../../models/producto.interface';
+import { ProductoDto } from '../../../models/producto.interface';
+import { ProductoService } from '../../../services/producto.service';
 
 @Component({
   selector: 'app-actualizar-producto',
@@ -11,7 +12,10 @@ import { Producto } from '../../../models/producto.interface';
   styleUrl: './actualizar-producto.component.scss'
 })
 export class ActualizarProductoComponent {
-  @Input() productoActualizar: Producto | null = null;  // Quita required si inicializas
+
+  constructor(private productoService: ProductoService){}
+
+  @Input() productoActualizar: ProductoDto | null = null;  // Quita required si inicializas
   @Input() mostrarActualizarProducto = false;
 
   @Output() cerrarModal = new EventEmitter<void>();  // ← Output correcto para cerrar
@@ -21,10 +25,21 @@ export class ActualizarProductoComponent {
   }
 
   guardarCambios() {
-    // Lógica de actualización (ej. API call)
     if (this.productoActualizar) {
-      console.log('Actualizando:', this.productoActualizar);
+      // Llama al servicio PUT
+      this.productoService.putProducto(
+        this.productoActualizar.codigo!, 
+        this.productoActualizar
+      ).subscribe({
+        next: () => {
+          console.log('Producto actualizado');
+          this.cerrar();
+        },
+        error: (error) => {
+          console.error('Error:', error);
+        }
+      });
     }
-    this.cerrar();
   }
+
 }

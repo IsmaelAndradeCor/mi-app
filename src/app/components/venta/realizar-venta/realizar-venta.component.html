@@ -1,0 +1,40 @@
+<h2>Realizar Venta</h2>
+<div class="form-section mb-3">
+    <div class="row">
+        <div class="col">
+            <div class="input-group">
+                <span class="input-group-text">Escanea</span>
+                <input class="form-control" type="text" [(ngModel)]="codigoProducto" (keyup.enter)="agregarProductoPorCodigo()" placeholder="Escanear código o escribir">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-section">
+    @for (producto of carrito; track $index) {
+    <div class="row">
+        <div class="col">
+            <!-- Botón eliminar (pasa el índice) -->
+            <button (click)="quitarItem($index)" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+        </div>
+        <div class="col">
+            <p>x{{producto.cantidad}}</p>
+        </div>
+        <div class="col">
+            <p>{{producto.producto.nombre}}</p>
+        </div>
+        <div class="col">
+            <p>{{producto.producto.descripcion}}</p>
+        </div>
+        <div class="col">
+            <p>{{ producto.producto.precioVenta | currency:'MXN':'symbol':'1.2-2' }}</p>
+        </div>
+    </div>
+    }
+    <div class="row">
+        <div class="col">
+            <!-- Mostrar total -->
+            <p class="text-end">Total: {{ calcularTotal() | currency:'MXN':'symbol':'1.2-2' }}</p>
+        </div>
+    </div>
+</div>
