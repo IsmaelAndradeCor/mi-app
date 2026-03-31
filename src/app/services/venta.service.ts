@@ -32,7 +32,7 @@ export class VentaService {
   public registrarVenta(venta: VentaDto): Observable<number> {
     const detalleXml = this.xmlDetalleVenta(venta.detalles);  // Convertir a XML
     
-    return this.http.post<number>(`${this.urlBase}/venta`, {
+    return this.http.post<number>(`${this.urlBase}/realizar_venta`, {
       folio: venta.folio,
       idUsuario: 1,
       total: venta.total,

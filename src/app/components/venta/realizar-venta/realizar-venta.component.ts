@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ProductoService } from '../../../services/producto.service';
 import { ProductoDto } from '../../../models/producto.interface';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { DetalleVentaDto } from '../../../models/detalle-venta';
 import { VentaDto } from '../../../models/venta';
 import { VentaService } from '../../../services/venta.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-realizar-venta',
@@ -15,15 +16,22 @@ import { VentaService } from '../../../services/venta.service';
 })
 export class RealizarVentaComponent implements OnInit {
 
+  @ViewChild('inputCodigo') inputCodigo!: ElementRef<HTMLInputElement>;
+  @ViewChild('inputCambio') inputCambio!: ElementRef<HTMLInputElement>;
+  // @ViewChild('buttonRealizarVenta') buttonRealizarVenta!: ElementRef<HTMLInputElement>;
+
   constructor(
     private productoService: ProductoService,
-    private ventaService: VentaService
+    private ventaService: VentaService,
+    private toastrService: ToastrService
   ){}
 
   productosDto: ProductoDto[] = [];
   productosPorCodigo: Map<string, ProductoDto> = new Map();  // ← Tu diccionario
   
   codigoProducto: string = '';
+  dineroRecibido: number = 0;
+  // cambioDar: number = 0;
 
   // carrito: ProductoDto[] = [];
   // Propiedad del carrito
@@ -43,6 +51,42 @@ export class RealizarVentaComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.enfocarInputCodigo();
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  manejarTeclaEsc(event: Event) {
+    event.preventDefault();
+    this.enfocarInputCodigo();
+  }
+
+  enfocarInputCodigo() {
+    setTimeout(() => {
+      this.inputCodigo?.nativeElement.focus();
+      this.inputCodigo?.nativeElement.select();
+    }, 0);
+  }
+
+  @HostListener('document:keydown.tab', ['$event'])
+  manejarTeclaTab(event: Event) {
+    event.preventDefault();
+    this.enfocarInputCambio();
+  }
+
+  enfocarInputCambio() {
+    setTimeout(() => {
+      this.inputCambio?.nativeElement.focus();
+      this.inputCambio?.nativeElement.select();
+    }, 0);
+  }
+
+  @HostListener('document:keydown.control.enter', ['$event'])
+  manejarTeclaIntro(event: Event) {
+    event.preventDefault();
+    this.finalizarVenta();
+  }
+
   agregarProductoPorCodigo() {
     if (this.codigoProducto && this.productosPorCodigo.has(this.codigoProducto)) {
       const producto = this.productosPorCodigo.get(this.codigoProducto)!;
@@ -53,6 +97,7 @@ export class RealizarVentaComponent implements OnInit {
     }
     // Limpiar input para próximo escaneo
     this.codigoProducto = '';
+    this.enfocarInputCodigo();
   }
 
   // Función corregida ✅
@@ -73,8 +118,18 @@ export class RealizarVentaComponent implements OnInit {
     // this.calcularTotal();  // Actualizar totales
   }
 
-  quitarItem(index: number) {
-    this.carrito.splice(index, 1);
+  disminuirCantidad(index: number) {
+    const item = this.carrito[index];
+
+    if (!item) return;
+
+    if (item.cantidad > 1) {
+      item.cantidad--;
+    } else {
+      this.carrito.splice(index, 1);
+    }
+
+    this.enfocarInputCodigo();
   }
 
   calcularTotal(): number {
@@ -83,28 +138,12 @@ export class RealizarVentaComponent implements OnInit {
     );
   }
 
-  // private xmlDetalleVenta(detalles: DetalleVentaDto[]): string {
-  //   const itemsXml = detalles.map(d => `
-  //     <Item>
-  //       <IdProducto>${d.idProducto}</IdProducto>
-  //       <Codigo>${d.codigo}</Codigo>
-  //       <Nombre>${d.nombre}</Nombre>
-  //       <Cantidad>${d.cantidad}</Cantidad>
-  //       <Precio>${d.precio}</Precio>
-  //     </Item>
-  //   `).join('');
+  calcularCambio(): number {
+    const totalVenta = this.calcularTotal();
 
-  //   return `<Items>${itemsXml}</Items>`;
-  // }
+    return this.dineroRecibido - totalVenta;
+  }
 
-  /// <summary>
-  /// Genera un folio único secuencial para la venta.
-  /// Formato: FOL-2026-0001, FOL-2026-0002, etc.
-  /// 
-  /// Usa localStorage para mantener un contador local
-  /// (ya que no hay backend para consultar folios existentes).
-  /// </summary>
-  /// <returns>Folio en formato FOL-YYYY-NNNN</returns>
   private generarFolio(): string {
     const año = new Date().getFullYear();
     const clave = `folio_${año}`;
@@ -134,16 +173,26 @@ export class RealizarVentaComponent implements OnInit {
       }))
     };
 
-    this.ventaService.registrarVenta(venta).subscribe(idVenta => {
-      console.log('Venta #' + idVenta + ' registrada exitosamente');
-      this.carrito = []; // Limpiar carrito
-      // this.mostrarExito('Venta registrada correctamente');
+    this.ventaService.registrarVenta(venta).subscribe({
+      next:(idVenta) => {
+        // console.log('Venta #' + idVenta + ' registrada exitosamente');
+        this.toastrService.success('Venta registrada con éxito!','Éxito!')
+        this.carrito = [];
+        this.codigoProducto = '';
+        this.enfocarInputCodigo();
+        this.dineroRecibido = 0;
+      },
+      error:(error) => {
+        this.toastrService.warning('Ocurrió un error, por favor contacta al administrador.','Error');
+        this.enfocarInputCodigo();
+        this.dineroRecibido = 0;
+      },
+      complete:() => {
+      }
     });
   }
   
 }
-
-
 
 export interface ItemCarrito {
   producto: ProductoDto;

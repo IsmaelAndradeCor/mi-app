@@ -3,6 +3,7 @@ import { ProductoDto } from '../../../models/producto.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../../services/producto.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-crear-producto',
@@ -13,7 +14,8 @@ import { ProductoService } from '../../../services/producto.service';
 export class CrearProductoComponent {
 
   constructor(
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private toastrService: ToastrService
   ){}
 
   producto: ProductoDto = {
@@ -32,10 +34,22 @@ export class CrearProductoComponent {
   agregarProducto(): void {
     this.productoService.postProducto(this.producto).subscribe({
       next:() => {
-        alert('Producto Insertado Correctamente');
+        this.toastrService.success('Producto creado correctamente');
+        this.producto = {
+                          id: 0,
+                          codigo: '',
+                          nombre: '',
+                          descripcion: '',
+                          precioCompra: 0,
+                          precioVenta: 0,
+                          stock: 0,
+                          stockMinimo: 0,
+                          categoria: '',
+                          proveedor: ''
+                        };
       },
-      error:(error) => {
-        alert(error);
+      error:() => {
+        this.toastrService.error('Ocurrió un error al intentar crear un producto');
       }
     });
   }
