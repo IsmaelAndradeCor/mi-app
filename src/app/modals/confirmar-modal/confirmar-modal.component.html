@@ -1,0 +1,17 @@
+<div *ngIf="mostrarConfirmarEliminarProducto" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{titulo}}</h5>
+        <button type="button" class="btn-close" (click)="cerrar()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{mensaje}}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="confirmar()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

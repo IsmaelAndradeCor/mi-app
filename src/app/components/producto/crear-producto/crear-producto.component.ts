@@ -48,8 +48,18 @@ export class CrearProductoComponent {
                           proveedor: ''
                         };
       },
-      error:() => {
-        this.toastrService.error('Ocurrió un error al intentar crear un producto');
+      error:(err) => {
+      if (err.status === 400) {
+        console.error(err.error.mensaje);
+      } else if (err.status === 500) {
+        console.error('Error interno del servidor: ' + err.error);
+      } else if (err.status === 0) {
+        console.error('No se pudo conectar con el servidor');
+      } else {
+        console.error('Ocurrió un error inesperado');
+      }
+      
+      this.toastrService.error(err.error.mensaje);
       }
     });
   }

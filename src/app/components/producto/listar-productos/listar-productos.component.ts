@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductoDto } from '../../../models/producto.interface';
 import { ActualizarProductoComponent } from '../actualizar-producto/actualizar-producto.component';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../../services/producto.service';
+import { ToastrService } from 'ngx-toastr';
+import { ConfirmarModalComponent } from '../../../modals/confirmar-modal/confirmar-modal.component';
 
 // // Simular API
 // const fetchProductos = async (): Promise<Producto[]> => {
@@ -11,7 +13,7 @@ import { ProductoService } from '../../../services/producto.service';
 
 @Component({
   selector: 'app-listar-productos',
-  imports: [CommonModule ,ActualizarProductoComponent],
+  imports: [CommonModule ,ActualizarProductoComponent, ConfirmarModalComponent],
   templateUrl: './listar-productos.component.html',
   styleUrl: './listar-productos.component.scss'
 })
@@ -19,12 +21,16 @@ import { ProductoService } from '../../../services/producto.service';
 export class ListarProductosComponent implements OnInit {
 
   constructor(
-    private productoService: ProductoService
+    private productoService: ProductoService,
+    private toastrService: ToastrService
   ){}
 
   productosDto: ProductoDto[] = [];
   productoActualizar: ProductoDto | null = null;;
   mostrarActualizarProducto: boolean = false;
+
+  mostrarConfirmarEliminarProducto: boolean = false;
+  codigoProductoEliminar: string = '';
 
   productosPorCodigo: Map<string, ProductoDto> = new Map();  // ← Tu diccionario
   
@@ -53,12 +59,14 @@ export class ListarProductosComponent implements OnInit {
 
         // 2. Recrear el array sin ese producto
         this.productosDto = this.productosDto.filter(x => x.codigo !== codigo);
+
+        // 3. Muesta el mensaje de exito
+        this.toastrService.success('Producto eliminado con éxito.')
       },
       error: (error) => {
-        console.error('Error eliminando producto:', error);
+        this.toastrService.error('Ocurrió un error al eliminar el producto, por favor contacte al administrador.');
       }
     });
-    console.log('Producto Eliminado');
   }
 
   abrirModalActualizarProductoPorCodigo(codigo: string): void {
@@ -66,17 +74,27 @@ export class ListarProductosComponent implements OnInit {
     this.productoService.getProductoPorCodigo(codigo).subscribe({
       next: (producto) => {
         this.productoActualizar = producto;
+        console.log(producto);
         this.mostrarActualizarProducto = true;
       },
       error: (error) => {
-        console.error('Error obteniendo producto:', error);
+        this.toastrService.error('Ocurrió un error al buscar el producto, por favor contacte al administrador.');
       }
     });
   }
 
-  cerrarModal(): void {
+  cerrarModalActualizar(): void {
     this.mostrarActualizarProducto = false;
     this.productoActualizar = null;
   }
 
+  mostrarModalConfirmarEliminar(codigo: string): void {
+    this.codigoProductoEliminar = codigo;
+    this.mostrarConfirmarEliminarProducto = true;
+  }
+
+  cerrarModalConfirmarEliminar(): void {
+    this.mostrarConfirmarEliminarProducto = false;
+    this.codigoProductoEliminar = '';
+  }
 }

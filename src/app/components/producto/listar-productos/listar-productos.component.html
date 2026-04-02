@@ -54,7 +54,7 @@
                 <td>{{i.proveedor}}</td>
                 <td>
                     <button class="btn btn-sm btn-warning me-2" (click)="abrirModalActualizarProductoPorCodigo(i.codigo)"><i class="fa-solid fa-pen-to-square"></i></button>                     
-                    <button class="btn btn-sm btn-danger" (click)="eliminarProductoPorCodigo(i.codigo)"><i class="fa-solid fa-trash"></i></button> 
+                    <button class="btn btn-sm btn-danger" (click)="mostrarModalConfirmarEliminar(i.codigo)"><i class="fa-solid fa-trash"></i></button> 
                 </td>
             </tr>
         </tbody>
@@ -66,5 +66,15 @@
   *ngIf="mostrarActualizarProducto"
   [productoActualizar]="productoActualizar"
   [mostrarActualizarProducto]="mostrarActualizarProducto"
-  (cerrarModal)="cerrarModal()"
+  (cerrarModal)="cerrarModalActualizar()"
 ></app-actualizar-producto>
+
+<app-confirmar-modal
+  *ngIf="mostrarConfirmarEliminarProducto"
+  [mostrarConfirmarEliminarProducto]="mostrarConfirmarEliminarProducto"
+  [titulo]="'Confirmar eliminación de '+ productosPorCodigo.get(codigoProductoEliminar)?.nombre"
+  [mensaje]="'¿Deseas eliminar este producto?'"
+  [codigo]="codigoProductoEliminar"
+  (confirmarModal)="eliminarProductoPorCodigo($event)"
+  (cerrarModal)="cerrarModalConfirmarEliminar()"
+></app-confirmar-modal>

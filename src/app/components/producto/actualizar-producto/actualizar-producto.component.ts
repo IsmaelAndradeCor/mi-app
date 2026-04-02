@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';  // Para ngModel
 import { ProductoDto } from '../../../models/producto.interface';
 import { ProductoService } from '../../../services/producto.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-actualizar-producto',
@@ -13,7 +14,10 @@ import { ProductoService } from '../../../services/producto.service';
 })
 export class ActualizarProductoComponent {
 
-  constructor(private productoService: ProductoService){}
+  constructor(
+    private productoService: ProductoService,
+    private toastrService: ToastrService
+  ){}
 
   @Input() productoActualizar: ProductoDto | null = null;  // Quita required si inicializas
   @Input() mostrarActualizarProducto = false;
@@ -26,17 +30,33 @@ export class ActualizarProductoComponent {
 
   guardarCambios() {
     if (this.productoActualizar) {
-      // Llama al servicio PUT
+
+      this.productoActualizar.precioCompra = Number(this.productoActualizar.precioCompra) || 0;
+      this.productoActualizar.precioVenta = Number(this.productoActualizar.precioVenta) || 0;
+      this.productoActualizar.stock = Number(this.productoActualizar.stock) || 0;
+      this.productoActualizar.stockMinimo = Number(this.productoActualizar.stockMinimo) || 0;
+      
       this.productoService.putProducto(
-        this.productoActualizar.codigo!, 
+        this.productoActualizar.codigo!,
         this.productoActualizar
       ).subscribe({
         next: () => {
-          console.log('Producto actualizado');
+          this.toastrService.success('Producto actualizado correctamente.');
           this.cerrar();
         },
         error: (error) => {
-          console.error('Error:', error);
+          console.log(error);
+          const errores = error?.error?.errors;
+
+          if (errores) {
+            Object.keys(errores).forEach(campo => {
+              errores[campo].forEach((mensaje: string) => {
+                this.toastrService.error(mensaje);
+              });
+            });
+          } else {
+            this.toastrService.error('Ocurrió un error al actualizar');
+          }
         }
       });
     }

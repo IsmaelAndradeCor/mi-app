@@ -11,18 +11,19 @@
 }
 
 .contenedor-scroll {
-  height: 610px; /* Altura límite */
-//   height: 800px; /* Altura límite - Pantalla full HD 16:9 */
+//   height: 610px; /* Altura límite */
+  height: 800px; /* Altura límite - Pantalla full HD 16:9 */
   overflow-y: auto; /* Scroll vertical */
   overflow-x: hidden; /* Oculta scroll horizontal */
 }
 
 .form-section {
     padding: 1rem;
-    border: 1px solid #dee2e6;
+    border: 1px solid gray;
+    // border: 1px solid #dee2e6;
     border-radius: 8px;
     // margin-bottom: 1rem;
-    background-color: #fdfdfd;
+    // background-color: #fdfdfd;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 
     &--highlight {
