@@ -4,6 +4,7 @@ import { DetalleVentaDto } from '../models/detalle-venta';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment.development';
+import { GenerarVentasDTO } from '../models/generar-ventas-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class VentaService {
         <Codigo>${d.codigo}</Codigo>
         <Nombre>${d.nombre}</Nombre>
         <Cantidad>${d.cantidad}</Cantidad>
+        <Costo>${d.costo}</Costo>
         <Precio>${d.precio}</Precio>
       </Item>
     `).join('');
@@ -38,5 +40,9 @@ export class VentaService {
       total: venta.total,
       detalle: detalleXml
     });
+  }
+
+  public getGenerarVentas(): Observable<GenerarVentasDTO[]> {
+    return this.http.get<GenerarVentasDTO[]>(`${this.urlBase}/generar_ventas`);
   }
 }

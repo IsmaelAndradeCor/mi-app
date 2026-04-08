@@ -24,6 +24,12 @@ export interface DetalleVentaDto {
   cantidad: number;
 
   /// <summary>
+  /// Costos unitario al momento de la venta
+  /// Se guarda en el detalle para conservar historial de los costos
+  /// </summary>
+  costo: number;
+
+  /// <summary>
   /// Precio unitario al momento de la venta
   /// Se guarda en el detalle para conservar historial de precios
   /// </summary>

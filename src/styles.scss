@@ -11,8 +11,8 @@
 }
 
 .contenedor-scroll {
-//   height: 610px; /* Altura límite */
-  height: 800px; /* Altura límite - Pantalla full HD 16:9 */
+  height: 1100px; /* Altura límite */
+//   height: 800px; /* Altura límite - Pantalla full HD 16:9 */
   overflow-y: auto; /* Scroll vertical */
   overflow-x: hidden; /* Oculta scroll horizontal */
 }

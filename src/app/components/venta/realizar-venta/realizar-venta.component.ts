@@ -3,7 +3,7 @@ import { ProductoService } from '../../../services/producto.service';
 import { ProductoDto } from '../../../models/producto.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DetalleVentaDto } from '../../../models/detalle-venta';
+import { ItemCarrito } from '../../../models/item-carrito';
 import { VentaDto } from '../../../models/venta';
 import { VentaService } from '../../../services/venta.service';
 import { ToastrService } from 'ngx-toastr';
@@ -88,10 +88,25 @@ export class RealizarVentaComponent implements OnInit {
   }
 
   agregarProductoPorCodigo() {
-    if (this.codigoProducto && this.productosPorCodigo.has(this.codigoProducto)) {
-      const producto = this.productosPorCodigo.get(this.codigoProducto)!;
-      // Agregar al carrito
-      this.agregarAlCarrito(producto);
+    const entrada = this.codigoProducto.trim();
+    let cantidad = 1;
+    let codigo = entrada;
+    if (entrada.includes('*')) {
+      const partes = entrada.split('*');
+
+      if (partes.length === 2 && partes[0] && partes[1]) {
+        cantidad = Number(partes[0]);
+        codigo = partes[1].trim();
+      } else {
+        this.toastrService.error('Multiplicación incorrecta para código de producto.');
+        return;
+      }
+    }
+
+    if (codigo && this.productosPorCodigo.has(codigo)) {
+      const producto = this.productosPorCodigo.get(codigo)!;
+      // Agregar al carrito individual
+      this.agregarAlCarrito(producto, cantidad);
     } else {
       alert('Producto no encontrado');
     }
@@ -100,22 +115,50 @@ export class RealizarVentaComponent implements OnInit {
     this.enfocarInputCodigo();
   }
 
-  // Función corregida ✅
-  agregarAlCarrito(producto: ProductoDto) {
+  // agregarProductoPorCodigo() {
+  //   if (this.codigoProducto && this.productosPorCodigo.has(this.codigoProducto)) {
+  //     const producto = this.productosPorCodigo.get(this.codigoProducto)!;
+  //     // Agregar al carrito individual
+  //     this.agregarAlCarrito(producto);
+  //   } else {
+  //     alert('Producto no encontrado');
+  //   }
+  //   // Limpiar input para próximo escaneo
+  //   this.codigoProducto = '';
+  //   this.enfocarInputCodigo();
+  // }
+
+  agregarAlCarrito(producto: ProductoDto, cantidad: number) {
+    const productoStock = this.productosPorCodigo.get(producto.codigo);
+    if (!productoStock || productoStock.stock <= 0) {
+      this.toastrService.error('Sin inventario');
+      return;
+    }
+
+    if (cantidad <= 0 || isNaN(Number(cantidad))) {
+      this.toastrService.error('Cantidad inválida');
+      return;
+    }
+
+    if (productoStock.stock < cantidad) {
+      this.toastrService.error('Inventario insuficiciente, la cantidad supera al stock.');
+      return;
+    }
+
     const itemExistente = this.carrito.find(item => 
       item.producto.codigo === producto.codigo  // Ahora existe producto.codigo
     );
-    
+
+    productoStock.stock -= cantidad;
+
     if (itemExistente) {
-      itemExistente.cantidad++;  // ✅ itemExistente tiene cantidad
+      itemExistente.cantidad += cantidad;  // itemExistente tiene cantidad
     } else {
       this.carrito.push({ 
-        producto, 
-        cantidad: 1 
-      });  // ✅ Crea ItemCarrito
+        producto: {...producto}, 
+        cantidad: cantidad 
+      });  // Crea ItemCarrito
     }
-    
-    // this.calcularTotal();  // Actualizar totales
   }
 
   disminuirCantidad(index: number) {
@@ -128,6 +171,10 @@ export class RealizarVentaComponent implements OnInit {
     } else {
       this.carrito.splice(index, 1);
     }
+
+    // Agregamos la funcion de que cuando eliminamos un articulo del carrito aumente el stock
+    const productoStock = this.productosPorCodigo.get(item.producto.codigo);
+    productoStock!.stock ++;
 
     this.enfocarInputCodigo();
   }
@@ -169,6 +216,7 @@ export class RealizarVentaComponent implements OnInit {
         codigo: item.producto.codigo,
         nombre: item.producto.nombre,
         cantidad: item.cantidad,
+        costo: item.producto.precioCompra,
         precio: item.producto.precioVenta
       }))
     };
@@ -194,7 +242,3 @@ export class RealizarVentaComponent implements OnInit {
   
 }
 
-export interface ItemCarrito {
-  producto: ProductoDto;
-  cantidad: number;
-}
