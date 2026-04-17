@@ -7,6 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { MarcaService } from '../../../services/marca.service';
 import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 import { ProductoUpsertDto } from '../../../models/dtos/requests/producto-upsert-dto';
+import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-response-dto';
+import { ProveedorService } from '../../../services/proveedor.service';
 
 @Component({
   selector: 'app-crear-producto',
@@ -19,25 +21,27 @@ export class CrearProductoComponent implements OnInit {
   constructor(
     private productoService: ProductoService,
     private marcaService: MarcaService,
+    private proveedorService: ProveedorService,
     private toastrService: ToastrService
   ){}
 
   ngOnInit(): void {
     this.getMarcas();
+    this.getProveedores();
   }
 
-  producto: ProductoDto = {
-    id: 0,
-    codigo: '',
-    nombre: '',
-    descripcion: '',
-    precioCompra: 0,
-    precioVenta: 0,
-    stock: 0,
-    stockMinimo: 0,
-    categoria: '',
-    proveedor: ''
-  };
+  // producto: ProductoDto = {
+  //   id: 0,
+  //   codigo: '',
+  //   nombre: '',
+  //   descripcion: '',
+  //   precioCompra: 0,
+  //   precioVenta: 0,
+  //   stock: 0,
+  //   stockMinimo: 0,
+  //   categoria: '',
+  //   proveedor: ''
+  // };
 
   productoUpsertDto: ProductoUpsertDto = {
     codigo: '',
@@ -54,6 +58,9 @@ export class CrearProductoComponent implements OnInit {
   }
 
   marcas: MarcaResponseDto[] = [];
+  proveedores: ProveedorResponsetDto[] = [];
+
+  selectedProveedor: number = 0;
 
   getMarcas(): void {
     this.marcaService.getMarcas().subscribe({
@@ -65,22 +72,33 @@ export class CrearProductoComponent implements OnInit {
     })
   }
 
+  getProveedores(): void {
+    this.proveedorService.getProveedores().subscribe({
+      next:(response) => {
+        this.proveedores = response;
+      },
+      error:() =>
+        this.toastrService.error('Ocurrió un error al cargar los Proveedores, por favor contacta al Administrador.')
+    })
+  }
+
   agregarProducto(): void {
-    this.productoService.postProducto(this.producto).subscribe({
+    this.productoService.postProducto(this.productoUpsertDto).subscribe({
       next:() => {
         this.toastrService.success('Producto creado correctamente');
-        this.producto = {
-                          id: 0,
-                          codigo: '',
-                          nombre: '',
-                          descripcion: '',
-                          precioCompra: 0,
-                          precioVenta: 0,
-                          stock: 0,
-                          stockMinimo: 0,
-                          categoria: '',
-                          proveedor: ''
-                        };
+        this.productoUpsertDto = {
+          codigo: '',
+          nombre: '',
+          descripcion: '',
+          costo: 0,
+          precio: 0,
+          stock: 0,
+          stockMinimo: 0,
+          idCategoria: 0,
+          idMarca: 0,
+          idUnidadMedida: 0,
+          idsProveedores: []
+        };
       },
       error:(err) => {
       if (err.status === 400) {
@@ -96,6 +114,16 @@ export class CrearProductoComponent implements OnInit {
       this.toastrService.error(err.error.mensaje);
       }
     });
+  }
+
+  agregarProveedor(): void {
+    if (this.productoUpsertDto.idsProveedores.includes(this.selectedProveedor)) {
+      this.toastrService.error('Ya agregó este proveedor.');
+      this.selectedProveedor = 0;
+      return;
+    }
+    this.productoUpsertDto.idsProveedores.push(this.selectedProveedor);
+    this.selectedProveedor = 0;
   }
 
 }

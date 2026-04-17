@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { ProductoDto } from '../models/producto.interface';
+import { ProductoUpsertDto } from '../models/dtos/requests/producto-upsert-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class ProductoService {
     return this.http.get<ProductoDto>(`${this.urlBase}/producto_codigo/${codigo}`);
   }
 
-  public postProducto(producto: ProductoDto): Observable<void> {
+  public postProducto(producto: ProductoUpsertDto): Observable<void> {
     return this.http.post<void>(this.urlBase + '/crear_producto', producto);
   }
 
