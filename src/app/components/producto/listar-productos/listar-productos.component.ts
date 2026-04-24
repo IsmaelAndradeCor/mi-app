@@ -1,10 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ProductoDto } from '../../../models/producto.interface';
 import { ActualizarProductoComponent } from '../actualizar-producto/actualizar-producto.component';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../../services/producto.service';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmarModalComponent } from '../../../modals/confirmar-modal/confirmar-modal.component';
+import { ProductoResponseDto } from '../../../models/dtos/responses/producto-response-dto';
+import { MarcaService } from '../../../services/marca.service';
+import { ProveedorService } from '../../../services/proveedor.service';
+import { CategoriaService } from '../../../services/categoria.service';
+import { UnidadMedidaService } from '../../../services/unidad-medida.service';
+import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-response-dto';
+import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
+import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
+import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-response-dto';
 
 // // Simular API
 // const fetchProductos = async (): Promise<Producto[]> => {
@@ -22,19 +30,36 @@ export class ListarProductosComponent implements OnInit {
 
   constructor(
     private productoService: ProductoService,
-    private toastrService: ToastrService
+    private marcaService: MarcaService,
+    private proveedorService: ProveedorService,
+    private toastrService: ToastrService,
+    private categoriaService: CategoriaService,
+    private unidadMedidaService: UnidadMedidaService
   ){}
 
-  productosDto: ProductoDto[] = [];
-  productoActualizar: ProductoDto | null = null;;
+  categorias: CategoriaResponseDto[] = [];
+  marcas: MarcaResponseDto[] = [];
+  unidadesMedida: UnidadMedidaResponseDto[] = [];
+  proveedores: ProveedorResponsetDto[] = [];
+
+  productosDto: ProductoResponseDto[] = [];
+  productoActualizar: ProductoResponseDto | null = null;;
   mostrarActualizarProducto: boolean = false;
 
   mostrarConfirmarEliminarProducto: boolean = false;
   codigoProductoEliminar: string = '';
 
-  productosPorCodigo: Map<string, ProductoDto> = new Map();  // ← Tu diccionario
+  productosPorCodigo: Map<string, ProductoResponseDto> = new Map();  // ← Tu diccionario
   
   ngOnInit() {
+    this.getProductos();
+    this.getCategorias();
+    this.getMarcas();
+    this.getUnidadesMedida();
+    this.getProveedores();
+  }
+
+  getProductos(): void {
     // Convierte el arreglo a Map UNA SOLA VEZ al cargar
 
     this.productoService.getProductos().subscribe({
@@ -48,6 +73,46 @@ export class ListarProductosComponent implements OnInit {
         console.log('Map creado con', this.productosPorCodigo.size, 'productos');
       }
     });
+  }
+
+  getCategorias(): void {
+    this.categoriaService.getCategorias().subscribe({
+      next:(response) => {
+        this.categorias = response;
+      },
+      error:() =>
+        this.toastrService.error('Ocurrió un error al cargar las Categorias, por favor contacta al Administrador.')
+    })
+  }
+
+  getMarcas(): void {
+    this.marcaService.getMarcas().subscribe({
+      next:(response) => {
+        this.marcas = response;
+      },
+      error:() =>
+        this.toastrService.error('Ocurrió un error al cargar las Marcas, por favor contacta al Administrador.')
+    })
+  }
+
+  getUnidadesMedida(): void {
+    this.unidadMedidaService.getUnidadesMedida().subscribe({
+      next:(response) => {
+        this.unidadesMedida = response;
+      },
+      error:() =>
+        this.toastrService.error('Ocurrió un error al cargar las Unidades de Medida, por favor contacta al Administrador.')
+    })
+  }
+
+  getProveedores(): void {
+    this.proveedorService.getProveedores().subscribe({
+      next:(response) => {
+        this.proveedores = response;
+      },
+      error:() =>
+        this.toastrService.error('Ocurrió un error al cargar los Proveedores, por favor contacta al Administrador.')
+    })
   }
 
   eliminarProductoPorCodigo(codigo: string): void {

@@ -1,6 +1,6 @@
-import { ProductoDto } from "./producto.interface";
+import { ProductoResponseDto } from "./dtos/responses/producto-response-dto";
 
 export interface ItemCarrito {
-  producto: ProductoDto;
+  producto: ProductoResponseDto;
   cantidad: number;
 }

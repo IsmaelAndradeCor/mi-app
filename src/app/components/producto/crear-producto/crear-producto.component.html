@@ -23,15 +23,7 @@
             <div class="input-group">
                 <span class="input-group-text">Marca</span>
 
-                <input
-                    class="form-control"
-                    type="text"
-                    name="marca"
-                    list="listaMarcas"
-                    [(ngModel)]="marcaTexto"
-                    (input)="onMarcaInput()"
-                    placeholder="Escribe o selecciona una marca"
-                    autocomplete="off">
+                <input class="form-control" type="text" name="marca" list="listaMarcas" [(ngModel)]="marcaTexto" (input)="onMarcaInput()" placeholder="Escribe o selecciona una marca" autocomplete="off">
 
                 <datalist id="listaMarcas">
                     @for (m of marcas; track m.id) {

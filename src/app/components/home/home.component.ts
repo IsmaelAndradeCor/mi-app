@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductoService } from '../../services/producto.service';
-import { ProductoDto } from '../../models/producto.interface';
 import { CommonModule } from '@angular/common';
 import { VentaService } from '../../services/venta.service';
 import { GenerarVentasDTO } from '../../models/generar-ventas-dto';
+import { ProductoResponseDto } from '../../models/dtos/responses/producto-response-dto';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +18,7 @@ export class HomeComponent implements OnInit {
     private ventaService: VentaService
   ) {}
 
-  productos: ProductoDto[] = [];
+  productos: ProductoResponseDto[] = [];
   ventas: GenerarVentasDTO [] = [];
 
   ngOnInit(): void {

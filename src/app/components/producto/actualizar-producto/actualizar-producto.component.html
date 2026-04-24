@@ -40,22 +40,33 @@
                 <input class="form-control" type="text" [(ngModel)]="productoActualizar.descripcion" name="descripcion">
               </div>
             </div>
+          <div class="col">
+              <div class="input-group">
+                  <span class="input-group-text">Categoria</span>
+                  <select class="form-select" name="selectCategoria" id="selectCategoria" [(ngModel)]="productoActualizar.categoria.id">
+                      <option [ngValue]="0" selected>Selecciona Categoria</option>
+                      @for (c of categorias; track $index) {
+                      <option [ngValue]="c.id">{{c.nombre}}</option>
+                      }
+                  </select>            
+              </div>
+          </div>
             <div class="col">
               <div class="input-group">
                 <span class="input-group-text">Precio Compra</span>
-                <input class="form-control" type="number" step="0.01" [(ngModel)]="productoActualizar.precioCompra" name="precioCompra">
+                <input class="form-control" type="number" step="0.01" [(ngModel)]="productoActualizar.costo" name="precioCompra">
               </div>
             </div>
             <div class="col">
               <div class="input-group">
                 <span class="input-group-text">Precio Venta</span>
-                <input class="form-control" type="number" step="0.01" [(ngModel)]="productoActualizar.precioVenta" name="precioVenta">
+                <input class="form-control" type="number" step="0.01" [(ngModel)]="productoActualizar.precio" name="precioVenta">
               </div>
             </div>
             <div class="col">
               <div class="input-group">
                 <span class="input-group-text">Ganancia</span>
-                <input class="form-control" type="number" [value]="productoActualizar.precioVenta - productoActualizar.precioCompra" name="ganancia" disabled>
+                <input class="form-control" type="number" [value]="productoActualizar.precio - productoActualizar.costo" name="ganancia" disabled>
               </div>
             </div>
             <div class="col">
@@ -73,7 +84,7 @@
             <div class="col">
               <div class="input-group">
                 <span class="input-group-text">Proveedor</span>
-                <input class="form-control" type="text" [(ngModel)]="productoActualizar.proveedor" name="proveedor">
+                <input class="form-control" type="text" [(ngModel)]="productoActualizar.proveedores" name="proveedor">
               </div>
             </div>
           </div>
@@ -84,6 +95,16 @@
         <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
         <button type="button" class="btn btn-success" (click)="guardarCambios()">Guardar</button>
       </div>
+      <div class="modal-footer">
+        <pre>{{productoActualizar | json}}</pre>
+
+      </div>
+      <div class="modal-footer">
+        <pre>{{productoUpsertDto | json}}</pre>
+
+      </div>
     </div>
   </div>
 </div>
+
+

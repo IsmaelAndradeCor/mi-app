@@ -1,12 +1,12 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { ProductoService } from '../../../services/producto.service';
-import { ProductoDto } from '../../../models/producto.interface';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ItemCarrito } from '../../../models/item-carrito';
 import { VentaDto } from '../../../models/venta';
 import { VentaService } from '../../../services/venta.service';
 import { ToastrService } from 'ngx-toastr';
+import { ProductoResponseDto } from '../../../models/dtos/responses/producto-response-dto';
 
 @Component({
   selector: 'app-realizar-venta',
@@ -26,8 +26,9 @@ export class RealizarVentaComponent implements OnInit {
     private toastrService: ToastrService
   ){}
 
-  productosDto: ProductoDto[] = [];
-  productosPorCodigo: Map<string, ProductoDto> = new Map();  // ← Tu diccionario
+  // productosDto: ProductoDto[] = [];
+  productos: ProductoResponseDto[] = [];
+  productosPorCodigo: Map<string, ProductoResponseDto> = new Map();  // ← Tu diccionario
   
   codigoProducto: string = '';
   dineroRecibido: number = 0;
@@ -40,10 +41,10 @@ export class RealizarVentaComponent implements OnInit {
   ngOnInit() {
     this.productoService.getProductos().subscribe({
       next:(prodcutosResponse) => {
-        this.productosDto = prodcutosResponse;
+        this.productos = prodcutosResponse;
 
         this.productosPorCodigo = new Map(
-          this.productosDto.map(producto => [producto.codigo, producto])
+          this.productos.map(producto => [producto.codigo, producto])
         );
         
         console.log('Map creado con', this.productosPorCodigo.size, 'productos');
@@ -108,7 +109,7 @@ export class RealizarVentaComponent implements OnInit {
       // Agregar al carrito individual
       this.agregarAlCarrito(producto, cantidad);
     } else {
-      alert('Producto no encontrado');
+      this.toastrService.error('Producto no encontrado.')
     }
     // Limpiar input para próximo escaneo
     this.codigoProducto = '';
@@ -128,7 +129,7 @@ export class RealizarVentaComponent implements OnInit {
   //   this.enfocarInputCodigo();
   // }
 
-  agregarAlCarrito(producto: ProductoDto, cantidad: number) {
+  agregarAlCarrito(producto: ProductoResponseDto, cantidad: number) {
     const productoStock = this.productosPorCodigo.get(producto.codigo);
     if (!productoStock || productoStock.stock <= 0) {
       this.toastrService.error('Sin inventario');
@@ -181,7 +182,7 @@ export class RealizarVentaComponent implements OnInit {
 
   calcularTotal(): number {
     return this.carrito.reduce((total, item) => 
-      total + (item.cantidad * item.producto.precioVenta), 0
+      total + (item.cantidad * item.producto.precio), 0
     );
   }
 
@@ -216,8 +217,8 @@ export class RealizarVentaComponent implements OnInit {
         codigo: item.producto.codigo,
         nombre: item.producto.nombre,
         cantidad: item.cantidad,
-        costo: item.producto.precioCompra,
-        precio: item.producto.precioVenta
+        costo: item.producto.costo,
+        precio: item.producto.precio
       }))
     };
 

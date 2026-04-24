@@ -17,3 +17,8 @@ export interface ProductoResponseDto {
     unidadMedida: UnidadMedidaResponseDto;
     proveedores: ProveedorResponsetDto[];
 }
+
+// Función util para filtrar bajos en stock
+export const getProductosBajoStock = (productos: ProductoResponseDto[]): ProductoResponseDto[] => {
+  return productos.filter(p => p.stock <= p.stockMinimo);
+};

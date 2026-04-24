@@ -27,10 +27,10 @@
             <p>{{producto.producto.descripcion}}</p>
         </div>
         <div class="col">
-            <p>{{ producto.producto.precioVenta | currency:'MXN':'symbol':'1.2-2' }}</p>
+            <p>{{ producto.producto.precio | currency:'MXN':'symbol':'1.2-2' }}</p>
         </div>
         <div class="col">
-            <p>{{ producto.producto.precioVenta * producto.cantidad | currency:'MXN':'symbol':'1.2-2' }}</p>
+            <p>{{ producto.producto.precio * producto.cantidad | currency:'MXN':'symbol':'1.2-2' }}</p>
         </div>
     </div>
     }

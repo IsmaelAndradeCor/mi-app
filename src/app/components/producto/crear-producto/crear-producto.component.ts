@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductoDto } from '../../../models/producto.interface';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../../services/producto.service';
@@ -170,6 +169,8 @@ export class CrearProductoComponent implements OnInit {
           idUnidadMedida: 0,
           idsProveedores: []
         };
+
+        this.marcaTexto = '';
       },
       error:(err) => {
         console.error(err.error);
