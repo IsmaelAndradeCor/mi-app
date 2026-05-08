@@ -6,9 +6,11 @@ import { CrearProductoComponent } from './components/producto/crear-producto/cre
 import { EliminarProductoComponent } from './components/producto/eliminar-producto/eliminar-producto.component';
 import { RealizarVentaComponent } from './components/venta/realizar-venta/realizar-venta.component';
 import { CrearMarcaComponent } from './components/marca/crear-marca/crear-marca.component';
+import { ListarMarcasComponent } from './components/marca/listar-marcas/listar-marcas.component';
+import { VentaComponent } from './components/venta/venta/venta.component';
+import { pinGuard } from './guard/pin.guard';
 
 export const routes: Routes = [
-    {path: '', component: HomeComponent},
     {path: 'home', component: HomeComponent},
     // {path: 'producto/actualizar-producto', component: ActualizarProductoComponent},
     // Productos
@@ -18,7 +20,12 @@ export const routes: Routes = [
 
     // Ventas
     {path: 'venta/realizar-venta', component: RealizarVentaComponent},
-
+    {path: 'venta/venta', component: VentaComponent, canActivate:[pinGuard]},
     // Marcas
-    {path: 'marca/crear-marca', component: CrearMarcaComponent}
+    {path: 'marca/crear-marca', component: CrearMarcaComponent},
+    {path: 'marca/listar-marcas', component: ListarMarcasComponent},
+
+    // Redirecciones al final
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: '**', redirectTo: 'home' }
 ];

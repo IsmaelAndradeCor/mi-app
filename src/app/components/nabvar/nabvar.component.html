@@ -48,6 +48,12 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="marca/listar-marcas" routerLinkActive="active">Marcas</a>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link btn btn-link" type="button" (click)="abrirVistaProtegida()">Historial Ventas</button>
+                </li>
             </ul>
 
             <!-- Item a la derecha -->
@@ -85,3 +91,9 @@
         </div>
     </div>
 </nav>
+
+<app-modal-pin
+  *ngIf="mostrarModalPin"
+  (cancelar)="cancelarPin()"
+  (confirmar)="confirmarPin($event)">
+</app-modal-pin>

@@ -1,0 +1,28 @@
+<div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.8);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Acceso protegido</h5>
+        <button type="button" class="btn-close" (click)="cerrar()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="pin" class="form-label">Ingresa el PIN</label>
+          <input
+            id="pin"
+            name="pin"
+            class="form-control"
+            type="password"
+            maxlength="10"
+            autocomplete="off"
+            [(ngModel)]="pin"
+            (keyup.enter)="aceptar()">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="cerrar()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="aceptar()">Entrar</button>
+      </div>
+    </div>
+  </div>
+</div>
