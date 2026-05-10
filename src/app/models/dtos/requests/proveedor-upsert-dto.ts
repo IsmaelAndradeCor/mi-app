@@ -1,5 +1,4 @@
-export interface ProveedorResponseDto {
-    id: number,
+export interface ProveedorUpsertDto {
     nombre: string,
     contacto: string,
     telefono: string,

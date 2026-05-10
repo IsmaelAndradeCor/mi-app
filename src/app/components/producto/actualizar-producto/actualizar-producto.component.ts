@@ -8,7 +8,7 @@ import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-r
 import { ProductoUpsertDto } from '../../../models/dtos/requests/producto-upsert-dto';
 import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
-import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-response-dto';
+import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
 
 @Component({
   selector: 'app-actualizar-producto',
@@ -28,7 +28,7 @@ export class ActualizarProductoComponent implements OnInit {
   @Input() categorias: CategoriaResponseDto[] = [];
   @Input() marcas: MarcaResponseDto[] = []; 
   @Input() unidadesMedida: UnidadMedidaResponseDto[] = [];
-  @Input() proveedores: ProveedorResponsetDto[] = [];  
+  @Input() proveedores: ProveedorResponseDto[] = [];  
   @Input() mostrarActualizarProducto = false;
 
   @Output() cerrarModal = new EventEmitter<void>();  // ← Output correcto para cerrar
@@ -48,7 +48,7 @@ export class ActualizarProductoComponent implements OnInit {
   }
 
   selectedProveedor: number = 0;
-  proveedoresPorId: Map<number, ProveedorResponsetDto> = new Map();  // ← Tu diccionario
+  proveedoresPorId: Map<number, ProveedorResponseDto> = new Map();  // ← Tu diccionario
 
   ngOnInit(): void {
     this.proveedoresPorId = new Map(

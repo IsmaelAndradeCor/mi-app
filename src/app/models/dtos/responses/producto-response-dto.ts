@@ -1,6 +1,6 @@
 import { CategoriaResponseDto } from "./categoria-response-dto";
 import { MarcaResponseDto } from "./marca-response-dto";
-import { ProveedorResponsetDto } from "./proveedor-response-dto";
+import { ProveedorResponseDto } from "./proveedor-response-dto";
 import { UnidadMedidaResponseDto } from "./unidad-medida-response-dto";
 
 export interface ProductoResponseDto {
@@ -15,7 +15,7 @@ export interface ProductoResponseDto {
     categoria: CategoriaResponseDto;
     marca: MarcaResponseDto;
     unidadMedida: UnidadMedidaResponseDto;
-    proveedores: ProveedorResponsetDto[];
+    proveedores: ProveedorResponseDto[];
 }
 
 // Función util para filtrar bajos en stock

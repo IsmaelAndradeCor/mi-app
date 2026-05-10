@@ -6,10 +6,11 @@ import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-
 import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmarModalComponent } from '../../../modals/confirmar-modal/confirmar-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-listar-marcas',
-  imports: [CrearMarcaComponent, ActualizarMarcaComponent, ConfirmarModalComponent, CommonModule],
+  imports: [CrearMarcaComponent, ActualizarMarcaComponent, ConfirmarModalComponent, CommonModule, FormsModule],
   templateUrl: './listar-marcas.component.html',
   styleUrl: './listar-marcas.component.scss'
 })
@@ -20,6 +21,7 @@ export class ListarMarcasComponent implements OnInit {
   ){}
 
   marcas: MarcaResponseDto[] = [];
+  marcasFiltradas: MarcaResponseDto[] = [];
   marcaActualizar: MarcaResponseDto | null = null;
 
   idMarcaEliminar: number | null = null;
@@ -27,6 +29,8 @@ export class ListarMarcasComponent implements OnInit {
 
   mostrarActualizarMarca: boolean = false;
   mostrarConfirmarEliminarMarca: boolean = false;
+
+  textoBusqueda: string = '';
 
   ngOnInit(): void {
     this.getMarcas();
@@ -36,6 +40,7 @@ export class ListarMarcasComponent implements OnInit {
     this.marcaService.getMarcas().subscribe({
       next:(response) => {
         this.marcas = response;
+        this.marcasFiltradas = [... this.marcas];
       }
     })
   }
@@ -78,6 +83,7 @@ export class ListarMarcasComponent implements OnInit {
     this.marcaService.deleteMarca(idMarca).subscribe({
       next:() => {
         this.marcas = this.marcas.filter(x => x.id !== idMarca);
+        this.filtrarMarcas();
 
         this.toastrService.success('Marca eliminada con éxito');
       },
@@ -91,5 +97,18 @@ export class ListarMarcasComponent implements OnInit {
     this.mostrarConfirmarEliminarMarca = false;
     this.idMarcaEliminar = null;
     this.nombreMarcaEliminar = '';
+  }
+
+  filtrarMarcas(): void {
+    const texto = this.textoBusqueda.trim().toLowerCase();
+
+    if (!texto) {
+      this.marcasFiltradas = [...this.marcas];
+      return;
+    }
+
+    this.marcasFiltradas = this.marcas.filter(x =>
+      x.nombre.toLowerCase().includes(texto)
+    );
   }
 }

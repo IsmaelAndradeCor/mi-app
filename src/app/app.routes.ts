@@ -15,14 +15,14 @@ export const routes: Routes = [
     // {path: 'producto/actualizar-producto', component: ActualizarProductoComponent},
     // Productos
     {path: 'producto/crear-producto', component: CrearProductoComponent},
-    {path: 'producto/eliminar-producto', component: EliminarProductoComponent},
+    // {path: 'producto/eliminar-producto', component: EliminarProductoComponent},
     {path: 'producto/listar-productos', component: ListarProductosComponent},
 
     // Ventas
     {path: 'venta/realizar-venta', component: RealizarVentaComponent},
     {path: 'venta/venta', component: VentaComponent, canActivate:[pinGuard]},
     // Marcas
-    {path: 'marca/crear-marca', component: CrearMarcaComponent},
+    // {path: 'marca/crear-marca', component: CrearMarcaComponent},
     {path: 'marca/listar-marcas', component: ListarMarcasComponent},
 
     // Redirecciones al final

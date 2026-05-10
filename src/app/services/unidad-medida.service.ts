@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { Observable } from 'rxjs';
 import { UnidadMedidaResponseDto } from '../models/dtos/responses/unidad-medida-response-dto';
+import { UnidadMedidaUpsertDto } from '../models/dtos/requests/unidad-medida-upsert-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,28 @@ export class UnidadMedidaService {
   private http = inject(HttpClient);
   private urlBase = environment.apiURL + '/UnidadMedida';
 
-  public getUnidadesMedida(): Observable<UnidadMedidaResponseDto[]>{
-    return this.http.get<UnidadMedidaResponseDto[]>(this.urlBase + '/listar_unidades_medida')
+  // Devuelve un arreglo de Unidades de Medida
+  public getUnidadesMedida(): Observable<UnidadMedidaResponseDto[]> {
+    return this.http.get<UnidadMedidaResponseDto[]>(this.urlBase + '/listar_unidades_medida');
   }
 
-  public getUnidadMedida(id: number): Observable<UnidadMedidaResponseDto>{
-    return this.http.get<UnidadMedidaResponseDto>(`${this.urlBase}/obtener_unidad_medida/${id}`)
+  // Devuelve un objeto de Unidad de Medida
+  public getUnidadMedidaPorId(idUnidadMedida: number): Observable<UnidadMedidaResponseDto> {
+    return this.http.get<UnidadMedidaResponseDto>(`${this.urlBase}/obtener_unidad_medida/${idUnidadMedida}`);
+  }
+
+  // Inserta una Unidad de Medida y devuelve la unidad insertada
+  public postUnidadMedida(unidadMedidaUpsertDto: UnidadMedidaUpsertDto): Observable<UnidadMedidaResponseDto> {
+    return this.http.post<UnidadMedidaResponseDto>(this.urlBase + '/crear_unidad_medida', unidadMedidaUpsertDto);
+  }
+
+  // Actualiza una Unidad de Medida y devuelve la unidad actualizada
+  public putUnidadMedida(idUnidadMedida: number, unidadMedidaUpsertDto: UnidadMedidaUpsertDto): Observable<UnidadMedidaResponseDto> {
+    return this.http.put<UnidadMedidaResponseDto>(`${this.urlBase}/actualizar_unidad_medida/${idUnidadMedida}`, unidadMedidaUpsertDto);
+  }
+
+  // Elimina con soft delete a partir del idUnidadMedida
+  public deleteUnidadMedida(idUnidadMedida: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlBase}/eliminar_unidad_medida/${idUnidadMedida}`);
   }
 }

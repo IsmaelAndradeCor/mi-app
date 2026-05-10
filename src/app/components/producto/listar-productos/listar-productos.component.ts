@@ -12,7 +12,7 @@ import { UnidadMedidaService } from '../../../services/unidad-medida.service';
 import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-response-dto';
 import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
-import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-response-dto';
+import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
 import { FormsModule } from '@angular/forms';
 
 // // Simular API
@@ -41,7 +41,7 @@ export class ListarProductosComponent implements OnInit {
   categorias: CategoriaResponseDto[] = [];
   marcas: MarcaResponseDto[] = [];
   unidadesMedida: UnidadMedidaResponseDto[] = [];
-  proveedores: ProveedorResponsetDto[] = [];
+  proveedores: ProveedorResponseDto[] = [];
 
   productosDto: ProductoResponseDto[] = [];
   productosFiltrados: ProductoResponseDto[] = [];
