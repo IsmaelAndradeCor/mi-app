@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MarcaService } from '../../../services/marca.service';
 import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 import { ProductoUpsertDto } from '../../../models/dtos/requests/producto-upsert-dto';
-import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-response-dto';
+import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
 import { ProveedorService } from '../../../services/proveedor.service';
 import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-response-dto';
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
@@ -54,9 +54,9 @@ export class CrearProductoComponent implements OnInit {
   categorias: CategoriaResponseDto[] = [];
   marcas: MarcaResponseDto[] = [];
   unidadesMedida: UnidadMedidaResponseDto[] = [];
-  proveedores: ProveedorResponsetDto[] = [];
+  proveedores: ProveedorResponseDto[] = [];
 
-  proveedoresPorId: Map<number, ProveedorResponsetDto> = new Map();  // ← Tu diccionario
+  proveedoresPorId: Map<number, ProveedorResponseDto> = new Map();  // ← Tu diccionario
   
   marcaTexto: string = '';
   selectedProveedor: number = 0;

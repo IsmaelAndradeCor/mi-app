@@ -12,17 +12,17 @@ export class ConfirmarModalComponent {
   @Input() mostrarConfirmarEliminarProducto = false;
   @Input() titulo: string = "";
   @Input() mensaje: string = "";
-  @Input() codigo: string = '';
+  @Input() id: number = 0;
 
   @Output() cerrarModal = new EventEmitter<void>();  
-  @Output() confirmarModal = new EventEmitter<string>(); 
+  @Output() confirmarModal = new EventEmitter<number>(); 
 
   cerrar() {
     this.cerrarModal.emit();  // Emite evento al padre
   }
 
   confirmar() {
-    this.confirmarModal.emit(this.codigo);  // Emite evento al padre
+    this.confirmarModal.emit(this.id);  // Emite evento al padre
     this.cerrarModal.emit();  // Emite evento al padre
   }
 }

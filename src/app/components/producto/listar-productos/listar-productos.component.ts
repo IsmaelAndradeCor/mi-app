@@ -12,7 +12,8 @@ import { UnidadMedidaService } from '../../../services/unidad-medida.service';
 import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-response-dto';
 import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
-import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-response-dto';
+import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
+import { FormsModule } from '@angular/forms';
 
 // // Simular API
 // const fetchProductos = async (): Promise<Producto[]> => {
@@ -21,7 +22,7 @@ import { ProveedorResponsetDto } from '../../../models/dtos/responses/proveedor-
 
 @Component({
   selector: 'app-listar-productos',
-  imports: [CommonModule ,ActualizarProductoComponent, ConfirmarModalComponent],
+  imports: [CommonModule, ActualizarProductoComponent, ConfirmarModalComponent, FormsModule],
   templateUrl: './listar-productos.component.html',
   styleUrl: './listar-productos.component.scss'
 })
@@ -40,16 +41,20 @@ export class ListarProductosComponent implements OnInit {
   categorias: CategoriaResponseDto[] = [];
   marcas: MarcaResponseDto[] = [];
   unidadesMedida: UnidadMedidaResponseDto[] = [];
-  proveedores: ProveedorResponsetDto[] = [];
+  proveedores: ProveedorResponseDto[] = [];
 
   productosDto: ProductoResponseDto[] = [];
+  productosFiltrados: ProductoResponseDto[] = [];
+
   productoActualizar: ProductoResponseDto | null = null;;
   mostrarActualizarProducto: boolean = false;
 
   mostrarConfirmarEliminarProducto: boolean = false;
-  codigoProductoEliminar: string = '';
+  idProductoEliminar: number | null = null;
 
-  productosPorCodigo: Map<string, ProductoResponseDto> = new Map();  // ← Tu diccionario
+  productosPorId: Map<number, ProductoResponseDto> = new Map();  // ← Tu diccionario
+
+  textoBusqueda: string = '';
   
   ngOnInit() {
     this.getProductos();
@@ -65,12 +70,12 @@ export class ListarProductosComponent implements OnInit {
     this.productoService.getProductos().subscribe({
       next:(prodcutosResponse) => {
         this.productosDto = prodcutosResponse;
-
-        this.productosPorCodigo = new Map(
-          this.productosDto.map(producto => [producto.codigo, producto])
+        this.productosFiltrados = [...this.productosDto];
+        this.productosPorId = new Map(
+          this.productosDto.map(producto => [producto.id, producto])
         );
         
-        console.log('Map creado con', this.productosPorCodigo.size, 'productos');
+        console.log('Map creado con', this.productosPorId.size, 'productos');
       }
     });
   }
@@ -115,15 +120,20 @@ export class ListarProductosComponent implements OnInit {
     })
   }
 
-  eliminarProductoPorCodigo(codigo: string): void {
+  trackByProductoId(index: number, item: ProductoResponseDto): number {
+    return item.id;
+  }
 
-    this.productoService.deleteProducto(codigo).subscribe({
+  eliminarProductoPorCodigo(id: number): void {
+
+    this.productoService.deleteProducto(id).subscribe({
       next:() => {
         // 1. Eliminar del Map (rápido)
-        this.productosPorCodigo.delete(codigo);
+        this.productosPorId.delete(id);
 
         // 2. Recrear el array sin ese producto
-        this.productosDto = this.productosDto.filter(x => x.codigo !== codigo);
+        this.productosDto = this.productosDto.filter(x => x.id !== id);
+        this.filtrarProductos();
 
         // 3. Muesta el mensaje de exito
         this.toastrService.success('Producto eliminado con éxito.')
@@ -153,13 +163,27 @@ export class ListarProductosComponent implements OnInit {
     this.productoActualizar = null;
   }
 
-  mostrarModalConfirmarEliminar(codigo: string): void {
-    this.codigoProductoEliminar = codigo;
+  mostrarModalConfirmarEliminar(id: number): void {
+    this.idProductoEliminar = id;
     this.mostrarConfirmarEliminarProducto = true;
   }
 
   cerrarModalConfirmarEliminar(): void {
     this.mostrarConfirmarEliminarProducto = false;
-    this.codigoProductoEliminar = '';
+    this.idProductoEliminar = null;
+  }
+
+  filtrarProductos(): void {
+    const texto = this.textoBusqueda.trim().toLowerCase();
+
+    if (!texto) {
+      this.productosFiltrados = [...this.productosDto];
+      return;
+    }
+
+    this.productosFiltrados = this.productosDto.filter(p =>
+      p.codigo.toLowerCase().includes(texto) ||
+      p.nombre.toLowerCase().includes(texto)
+    );
   }
 }

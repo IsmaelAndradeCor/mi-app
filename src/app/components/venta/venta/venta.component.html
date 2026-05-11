@@ -1,0 +1,33 @@
+<div class="form-section">
+    <div class="row justify-content-between">
+        <div class="col-auto"><h5>Ventas</h5></div>
+        <div class="col-auto"><h5>Ganacias del día: {{calcularTotalGanancias() | currency:'USD':'symbol':'1.2-2'}}</h5></div>
+    </div>
+    @if (ventas.length) {
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Folio</th>
+                <th>Fecha Venta</th>
+                <th>Costo Total</th>
+                <th>Precio Total</th>
+                <th>Ganancias</th>
+                <th>Forma Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let i of ventas; index as j">
+                <td>{{i.folio}}</td>
+                <td>{{i.fechaVenta}}</td>
+                <td>{{i.costoTotal | currency:'USD':'symbol':'1.2-2' }}</td>
+                <td>{{i.total | currency:'USD':'symbol':'1.2-2' }}</td>
+                <td>{{i.ganancias | currency:'USD':'symbol':'1.2-2' }}</td>
+                <td>{{i.formaPago}}</td>
+            </tr>
+        </tbody>
+    </table>
+    }@else {
+    <p>Hoy no se han generado ventas.</p>
+    }
+
+</div>

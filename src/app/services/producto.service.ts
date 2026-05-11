@@ -35,7 +35,7 @@ export class ProductoService {
     return this.http.put<void>(`${this.urlBase}/actualizar_producto`, producto);
   }
 
-  public deleteProducto(codigo: string): Observable<void> {
-    return this.http.delete<void>(`${this.urlBase}/eliminar_producto/${codigo}`);
+  public deleteProducto(idProducto: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlBase}/eliminar_producto/${idProducto}`);
   }
 }

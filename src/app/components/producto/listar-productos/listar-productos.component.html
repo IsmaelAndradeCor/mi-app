@@ -1,12 +1,22 @@
-<h3>Listado de Productos</h3>
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h3 class="mb-0">Listado de Productos</h3>
+
+  <input
+    type="text"
+    class="form-control"
+    style="max-width: 350px;"
+    placeholder="Buscar por código o nombre"
+    [(ngModel)]="textoBusqueda"
+    (input)="filtrarProductos()">
+</div>
 <div class="form-section">
     <table class="table table-sm table-striped table-bordered">
         <thead>
             <tr>
                 <th>Código</th>
                 <th>Nombre</th>
-                <th>Precio Compra</th>
-                <th>Precio Venta</th>
+                <th>Costo</th>
+                <th>Precio</th>
                 <th>Ganancia</th>
                 <th>Stock</th>
                 <th>Stock Minimo</th>
@@ -15,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let i of productosDto; index as j">
+            <tr *ngFor="let i of productosFiltrados; trackBy: trackByProductoId">
                 <td>{{i.codigo}}</td>
                 <td>{{i.nombre}}</td>
                 <td>{{i.costo | currency:'USD':'symbol':'1.2-2' }}</td>
@@ -27,7 +37,7 @@
                 <td>@for (p of i.proveedores; track $index) { {{p.nombre}} }</td>
                 <td>
                     <button class="btn btn-sm btn-warning me-2" type="button" (click)="abrirModalActualizarProductoPorCodigo(i.codigo)"><i class="fa-solid fa-pen-to-square"></i></button>                     
-                    <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalConfirmarEliminar(i.codigo)"><i class="fa-solid fa-trash"></i></button> 
+                    <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalConfirmarEliminar(i.id)"><i class="fa-solid fa-trash"></i></button> 
                 </td>
             </tr>
         </tbody>
@@ -49,9 +59,9 @@
 <app-confirmar-modal
   *ngIf="mostrarConfirmarEliminarProducto"
   [mostrarConfirmarEliminarProducto]="mostrarConfirmarEliminarProducto"
-  [titulo]="'Confirmar eliminación de '+ productosPorCodigo.get(codigoProductoEliminar)?.nombre"
+  [titulo]="'Confirmar eliminación de ' + (productosPorId.get(idProductoEliminar ?? 0)?.nombre ?? '')"
   [mensaje]="'¿Deseas eliminar este producto?'"
-  [codigo]="codigoProductoEliminar"
+  [id]="idProductoEliminar ?? 0"
   (confirmarModal)="eliminarProductoPorCodigo($event)"
   (cerrarModal)="cerrarModalConfirmarEliminar()"
 ></app-confirmar-modal>

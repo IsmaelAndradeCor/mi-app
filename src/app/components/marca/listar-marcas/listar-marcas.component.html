@@ -1,0 +1,52 @@
+<div class="marca-page">
+    <app-crear-marca></app-crear-marca>
+
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 mt-3">
+    <h3 class="mb-0">Listado de Marcas</h3>
+
+    <input
+        type="text"
+        class="form-control"
+        style="max-width: 350px;"
+        placeholder="Buscar por nombre"
+        [(ngModel)]="textoBusqueda"
+        (input)="filtrarMarcas()">
+    </div>
+    <div class="form-section form-section-fill">
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th style="width: 10%; text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let i of marcasFiltradas; index as j">
+                    <td>{{i.nombre}}</td>
+                    <td style="width: 10%; text-align: center;">
+                        <button class="btn btn-sm btn-warning me-3" type="button" (click)="mostrarModalActualizarMarcaPorId(i.id)"><i class="fa-solid fa-pen-to-square"></i></button>                     
+                        <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalConfirmarEliminar(i.id)"><i class="fa-solid fa-trash"></i></button> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<app-actualizar-marca
+    *ngIf="mostrarActualizarMarca"
+    [marcaActualizar]="marcaActualizar"
+    [mostrarActualizarMarca]="mostrarActualizarMarca"
+    (cerrarModal)="cerrarModalActualizar()"
+    (marcaActualizada)="actualizarMarcaEnLista($event)"
+></app-actualizar-marca>
+
+<app-confirmar-modal
+  *ngIf="mostrarConfirmarEliminarMarca"
+  [mostrarConfirmarEliminarProducto]="mostrarConfirmarEliminarMarca"
+  [titulo]="'Confirmar eliminación de '+ nombreMarcaEliminar"
+  [mensaje]="'¿Deseas eliminar esta Marca?'"
+  [id]="idMarcaEliminar!"
+  (confirmarModal)="eliminarMarcaPorId($event)"
+  (cerrarModal)="cerrarModalConfirmarEliminar()"
+></app-confirmar-modal>

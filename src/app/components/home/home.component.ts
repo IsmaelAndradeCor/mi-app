@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { VentaService } from '../../services/venta.service';
 import { GenerarVentasDTO } from '../../models/generar-ventas-dto';
 import { ProductoResponseDto } from '../../models/dtos/responses/producto-response-dto';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-home',
@@ -15,38 +16,41 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productoService: ProductoService,
-    private ventaService: VentaService
+    private toastrService: ToastrService
   ) {}
 
   productos: ProductoResponseDto[] = [];
-  ventas: GenerarVentasDTO [] = [];
+  // ventas: GenerarVentasDTO [] = [];
 
   ngOnInit(): void {
     this.getProductosStockMinimo();
-    this.getGenerarVenta();
+    // this.getGenerarVenta();
   }
 
   getProductosStockMinimo(): void {
     this.productoService.getProductosStockMinimo().subscribe({
       next:(res) => {
         this.productos = res;
+      },
+      error:() => {
+        this.toastrService.error('Ocurrió un error al cargar el inventario con stock minimo, por favor contacta al Administrador.')
       }
     });
   }
 
-  getGenerarVenta(): void {
-    this.ventaService.getGenerarVentas().subscribe({
-      next:(res) => {
-        this.ventas = res;
-      }
-    });
-  }
+  // getGenerarVenta(): void {
+  //   this.ventaService.getGenerarVentas().subscribe({
+  //     next:(res) => {
+  //       this.ventas = res;
+  //     }
+  //   });
+  // }
 
-  calcularTotalGanancias(): number {
-    console.log('calcularTotalGanancias()');
-    return this.ventas.reduce((total, item) => 
-      total + (item.ganancias), 0
-    );
-  }
+  // calcularTotalGanancias(): number {
+  //   console.log('calcularTotalGanancias()');
+  //   return this.ventas.reduce((total, item) => 
+  //     total + (item.ganancias), 0
+  //   );
+  // }
 
 }
