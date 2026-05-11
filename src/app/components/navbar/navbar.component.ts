@@ -8,13 +8,13 @@ import { ModalPinComponent } from '../../modals/modal-pin/modal-pin.component';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-nabvar',
+  selector: 'app-navbar',
   standalone: true,
   imports: [RouterLink, RouterLinkActive, CommonModule, ModalPinComponent],
-  templateUrl: './nabvar.component.html',
-  styleUrl: './nabvar.component.scss'
+  templateUrl: './navbar.component.html',
+  styleUrl: './navbar.component.scss'
 })
-export class NabvarComponent implements OnDestroy {
+export class NavbarComponent implements OnDestroy {
 
   constructor(
     public themeService: ThemeService,

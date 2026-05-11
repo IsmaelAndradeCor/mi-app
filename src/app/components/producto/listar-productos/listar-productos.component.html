@@ -1,47 +1,43 @@
-<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-  <h3 class="mb-0">Listado de Productos</h3>
+<div class="producto-page">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <h3 class="mb-0">Listado de Productos</h3>
 
-  <input
-    type="text"
-    class="form-control"
-    style="max-width: 350px;"
-    placeholder="Buscar por código o nombre"
-    [(ngModel)]="textoBusqueda"
-    (input)="filtrarProductos()">
-</div>
-<div class="form-section">
-    <table class="table table-sm table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Costo</th>
-                <th>Precio</th>
-                <th>Ganancia</th>
-                <th>Stock</th>
-                <th>Stock Minimo</th>
-                <th>Proveedor</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let i of productosFiltrados; trackBy: trackByProductoId">
-                <td>{{i.codigo}}</td>
-                <td>{{i.nombre}}</td>
-                <td>{{i.costo | currency:'USD':'symbol':'1.2-2' }}</td>
-                <td>{{i.precio | currency:'USD':'symbol':'1.2-2' }}</td>
-                <td>{{i.precio - i.costo | currency:'USD':'symbol':'1.2-2' }}</td>
-                <!-- <td style="text-align: center;">{{i.precioVenta | currency:'MXN':'symbol':'1.2-2' }}</td> -->
-                <td [ngClass]="{'table-danger' : i.stock <= i.stockMinimo}">{{i.stock}}</td>
-                <td>{{i.stockMinimo}}</td>
-                <td>@for (p of i.proveedores; track $index) { {{p.nombre}} }</td>
-                <td>
-                    <button class="btn btn-sm btn-warning me-2" type="button" (click)="abrirModalActualizarProductoPorCodigo(i.codigo)"><i class="fa-solid fa-pen-to-square"></i></button>                     
-                    <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalConfirmarEliminar(i.id)"><i class="fa-solid fa-trash"></i></button> 
-                </td>
-            </tr>
-        </tbody>
-    </table>
+        <input type="text" class="form-control" style="max-width: 350px;" placeholder="Buscar por código o nombre" [(ngModel)]="textoBusqueda" (input)="filtrarProductos()">
+    </div>
+    <div class="form-section form-section-fill">
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Costo</th>
+                    <th>Precio</th>
+                    <th>Ganancia</th>
+                    <th>Stock</th>
+                    <th>Stock Minimo</th>
+                    <th>Proveedor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let i of productosFiltrados; trackBy: trackByProductoId">
+                    <td>{{i.codigo}}</td>
+                    <td>{{i.nombre}}</td>
+                    <td>{{i.costo | currency:'USD':'symbol':'1.2-2' }}</td>
+                    <td>{{i.precio | currency:'USD':'symbol':'1.2-2' }}</td>
+                    <td>{{i.precio - i.costo | currency:'USD':'symbol':'1.2-2' }}</td>
+                    <!-- <td style="text-align: center;">{{i.precioVenta | currency:'MXN':'symbol':'1.2-2' }}</td> -->
+                    <td [ngClass]="{'table-danger' : i.stock <= i.stockMinimo}">{{i.stock}}</td>
+                    <td>{{i.stockMinimo}}</td>
+                    <td>@for (p of i.proveedores; track $index) { {{p.nombre}} }</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-2" type="button" (click)="abrirModalActualizarProductoPorCodigo(i.codigo)"><i class="fa-solid fa-pen-to-square"></i></button>                     
+                        <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalConfirmarEliminar(i.id)"><i class="fa-solid fa-trash"></i></button> 
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 
