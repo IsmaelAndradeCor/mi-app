@@ -3,7 +3,6 @@ import { HomeComponent } from './components/home/home.component';
 import { ListarProductosComponent } from './components/producto/listar-productos/listar-productos.component';
 import { ActualizarProductoComponent } from './components/producto/actualizar-producto/actualizar-producto.component';
 import { CrearProductoComponent } from './components/producto/crear-producto/crear-producto.component';
-import { EliminarProductoComponent } from './components/producto/eliminar-producto/eliminar-producto.component';
 import { RealizarVentaComponent } from './components/venta/realizar-venta/realizar-venta.component';
 import { CrearMarcaComponent } from './components/marca/crear-marca/crear-marca.component';
 import { ListarMarcasComponent } from './components/marca/listar-marcas/listar-marcas.component';
