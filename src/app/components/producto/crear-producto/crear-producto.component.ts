@@ -177,38 +177,6 @@ export class CrearProductoComponent implements OnInit {
         };
 
         this.marcaTexto = '';
-      },
-      error:(err) => {
-        console.error(err.error);
-        if (err.error?.errors) {
-          console.error(err.error)
-          Object.entries(err.error.errors).forEach(([campo, mensajes]) => {
-            (mensajes as string[]).forEach(mensaje => {
-              this.toastrService.error(`${mensaje}`);
-              // this.toastrService.error(`${campo}: ${mensaje}`);
-            });
-          });
-          return;
-        }
-      //   console.log(err);
-      // if (err.status === 400) {
-      //   if (err.error?.errors) {
-      //     Object.entries(err.error.errors).forEach(([campo, mensajes]) => {
-      //       (mensajes as string[]).forEach(mensaje => {
-      //         this.toastrService.error(`${campo}: ${mensaje}`);
-      //       });
-      //     });
-      //     return;
-      //   }
-      // } else if (err.status === 500) {
-      //   console.error('Error interno del servidor: ' + err.error);
-      // } else if (err.status === 0) {
-      //   console.error('No se pudo conectar con el servidor');
-      // } else {
-      //   console.error('Ocurrió un error inesperado');
-      // }
-      
-      // this.toastrService.error(err.error.mensaje);
       }
     });
   }

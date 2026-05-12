@@ -31,7 +31,7 @@ export class RealizarVentaComponent implements OnInit {
   productosPorCodigo: Map<string, ProductoResponseDto> = new Map();  // ← Tu diccionario
   
   codigoProducto: string = '';
-  dineroRecibido: number = 0;
+  dineroRecibido: number | null = null;
   // cambioDar: number = 0;
 
   // carrito: ProductoDto[] = [];
@@ -208,7 +208,7 @@ export class RealizarVentaComponent implements OnInit {
   calcularCambio(): number {
     const totalVenta = this.calcularTotal();
 
-    return this.dineroRecibido - totalVenta;
+    return this.dineroRecibido ?? 0 - totalVenta;
   }
 
   private generarFolio(): string {
@@ -228,6 +228,11 @@ export class RealizarVentaComponent implements OnInit {
   }
 
   finalizarVenta() {
+    if (!this.carrito.length){
+      this.toastrService.error('Carrito vacio.')
+      return;
+    }
+
     const venta: VentaDto = {
       folio: this.generarFolio(),
       total: this.calcularTotal(),
@@ -248,12 +253,12 @@ export class RealizarVentaComponent implements OnInit {
         this.carrito = [];
         this.codigoProducto = '';
         this.enfocarInputCodigo();
-        this.dineroRecibido = 0;
+        this.dineroRecibido = null;
       },
       error:(error) => {
         this.toastrService.warning('Ocurrió un error, por favor contacta al administrador.','Error');
         this.enfocarInputCodigo();
-        this.dineroRecibido = 0;
+        this.dineroRecibido = null;
       },
       complete:() => {
       }

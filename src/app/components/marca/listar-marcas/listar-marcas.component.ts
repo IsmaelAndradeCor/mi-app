@@ -22,13 +22,13 @@ export class ListarMarcasComponent implements OnInit {
 
   marcas: MarcaResponseDto[] = [];
   marcasFiltradas: MarcaResponseDto[] = [];
-  marcaActualizar: MarcaResponseDto | null = null;
+  objetoActualizar: MarcaResponseDto | null = null;
 
-  idMarcaEliminar: number | null = null;
-  nombreMarcaEliminar: string = '';
+  idEliminar: number | null = null;
+  nombreEliminar: string = '';
 
-  mostrarActualizarMarca: boolean = false;
-  mostrarConfirmarEliminarMarca: boolean = false;
+  mostrarActualizar: boolean = false;
+  mostrarEliminar: boolean = false;
 
   textoBusqueda: string = '';
 
@@ -45,11 +45,11 @@ export class ListarMarcasComponent implements OnInit {
     })
   }
 
-  mostrarModalActualizarMarcaPorId(idMarca: number): void {
+  mostrarModalActualizarPorId(idMarca: number): void {
     this.marcaService.getMarca(idMarca).subscribe({
       next: (marca) => {
-        this.marcaActualizar = marca;
-        this.mostrarActualizarMarca = true;
+        this.objetoActualizar = marca;
+        this.mostrarActualizar = true;
       },
       error: (error) => {
         this.toastrService.error('Ocurrió un error al buscar la Marca, por favor contacte al administrador.');
@@ -58,32 +58,33 @@ export class ListarMarcasComponent implements OnInit {
   }
 
   cerrarModalActualizar(): void {
-    this.mostrarActualizarMarca = false;
-    this.marcaActualizar = null;
+    this.mostrarActualizar = false;
+    this.objetoActualizar = null;
   }
 
-  actualizarMarcaEnLista(marcaActualizada: MarcaResponseDto): void {
-    const index = this.marcas.findIndex(m => m.id === marcaActualizada.id);
+  actualizarEnLista(objetoActualizado: MarcaResponseDto): void {
+    const index = this.marcas.findIndex(m => m.id === objetoActualizado.id);
 
     if (index !== -1) {
-      this.marcas[index] = marcaActualizada;
-      this.marcas = [...this.marcas];
+      this.marcas[index] = objetoActualizado;
+      this.marcasFiltradas = [...this.marcas];
+      this.filtrarTabla();
     }
 
     this.cerrarModalActualizar();
   }
 
   mostrarModalConfirmarEliminar(idMarca: number): void {
-    this.idMarcaEliminar = idMarca;
-    this.nombreMarcaEliminar = this.marcas.find((i) => i.id === idMarca)?.nombre ?? '';
-    this.mostrarConfirmarEliminarMarca = true;
+    this.idEliminar = idMarca;
+    this.nombreEliminar = this.marcas.find((i) => i.id === idMarca)?.nombre ?? '';
+    this.mostrarEliminar = true;
   }
 
-  eliminarMarcaPorId(idMarca: number): void {
+  eliminarPorId(idMarca: number): void {
     this.marcaService.deleteMarca(idMarca).subscribe({
       next:() => {
         this.marcas = this.marcas.filter(x => x.id !== idMarca);
-        this.filtrarMarcas();
+        this.filtrarTabla();
 
         this.toastrService.success('Marca eliminada con éxito');
       },
@@ -94,12 +95,12 @@ export class ListarMarcasComponent implements OnInit {
   }
 
   cerrarModalConfirmarEliminar(): void {
-    this.mostrarConfirmarEliminarMarca = false;
-    this.idMarcaEliminar = null;
-    this.nombreMarcaEliminar = '';
+    this.mostrarEliminar = false;
+    this.idEliminar = null;
+    this.nombreEliminar = '';
   }
 
-  filtrarMarcas(): void {
+  filtrarTabla(): void {
     const texto = this.textoBusqueda.trim().toLowerCase();
 
     if (!texto) {
@@ -110,5 +111,15 @@ export class ListarMarcasComponent implements OnInit {
     this.marcasFiltradas = this.marcas.filter(x =>
       x.nombre.toLowerCase().includes(texto)
     );
+  }
+
+  limpiarTextoBusqueda(): void {
+    this.textoBusqueda = '';
+    this.filtrarTabla();
+  }
+
+  marcaCreada(marcaCreada: MarcaResponseDto): void {
+    this.marcas.push(marcaCreada);
+    this.filtrarTabla();
   }
 }

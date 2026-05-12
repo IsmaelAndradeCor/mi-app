@@ -21,7 +21,7 @@ export class UnidadMedidaService {
   }
 
   // Devuelve un objeto de Unidad de Medida
-  public getUnidadMedidaPorId(idUnidadMedida: number): Observable<UnidadMedidaResponseDto> {
+  public getUnidadMedida(idUnidadMedida: number): Observable<UnidadMedidaResponseDto> {
     return this.http.get<UnidadMedidaResponseDto>(`${this.urlBase}/obtener_unidad_medida/${idUnidadMedida}`);
   }
 

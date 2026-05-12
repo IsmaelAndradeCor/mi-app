@@ -7,6 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
+import { errorInterceptor } from './core/interceptors/errorInterceptor.interceptor';
 
 // export const appConfig: ApplicationConfig = {
 //   providers: [
@@ -29,6 +30,9 @@ export const appConfig: ApplicationConfig = {
     provideToastr(),
     provideHttpClient(
       withInterceptors([loadingInterceptor])
+    ),
+    provideHttpClient(
+      withInterceptors([errorInterceptor])
     )
   ]
 };

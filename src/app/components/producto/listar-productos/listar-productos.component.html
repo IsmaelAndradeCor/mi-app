@@ -1,8 +1,10 @@
-<div class="producto-page">
-    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+<div class="component-page">
+    <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 mt-3">
         <h3 class="mb-0">Listado de Productos</h3>
-
-        <input type="text" class="form-control" style="max-width: 350px;" placeholder="Buscar por código o nombre" [(ngModel)]="textoBusqueda" (input)="filtrarProductos()">
+        <div class="input-group" style="max-width: 350px;">
+            <input type="text" class="form-control" placeholder="Buscar por código o nombre" [(ngModel)]="textoBusqueda" (input)="filtrarTabla()">
+            <button class="btn btn-danger" type="button" (click)="limpiarTextoBusqueda()"><i class="fa-solid fa-eraser"></i></button>
+        </div>
     </div>
     <div class="form-section form-section-fill">
         <table class="table table-sm table-striped table-bordered">
@@ -53,8 +55,8 @@
 ></app-actualizar-producto>
 
 <app-confirmar-modal
-  *ngIf="mostrarConfirmarEliminarProducto"
-  [mostrarConfirmarEliminarProducto]="mostrarConfirmarEliminarProducto"
+  *ngIf="mostrarConfirmarEliminar"
+  [mostrarConfirmarEliminar]="mostrarConfirmarEliminar"
   [titulo]="'Confirmar eliminación de ' + (productosPorId.get(idProductoEliminar ?? 0)?.nombre ?? '')"
   [mensaje]="'¿Deseas eliminar este producto?'"
   [id]="idProductoEliminar ?? 0"

@@ -19,10 +19,10 @@ export class ActualizarMarcaComponent {
   ){}
 
   @Output() cerrarModal = new EventEmitter<void>();  // ← Output correcto para cerrar
-  @Output() marcaActualizada = new EventEmitter<MarcaResponseDto>();
+  @Output() objetoActualizado = new EventEmitter<MarcaResponseDto>();
 
-  @Input() marcaActualizar: MarcaResponseDto | null = null;
-  @Input() mostrarActualizarMarca = false;
+  @Input() objetoActualizar: MarcaResponseDto | null = null;
+  @Input() mostrarActualizar = false;
 
   marcaUpsert: MarcaUpsertDto = {
     nombre: ''
@@ -35,14 +35,14 @@ export class ActualizarMarcaComponent {
   }
 
   guardarCambios() {
-    if (this.marcaActualizar) {
+    if (this.objetoActualizar) {
       this.marcaUpsert.nombre = this.marcaNombre;
 
-      this.marcaService.putMarca(this.marcaActualizar.id, this.marcaUpsert).subscribe({
+      this.marcaService.putMarca(this.objetoActualizar.id, this.marcaUpsert).subscribe({
         next:(response) => {
-          this.marcaActualizar = response;
+          this.objetoActualizar = response;
           this.toastrService.success('Marca actualizada correctamente!');
-          this.marcaActualizada.emit(response);
+          this.objetoActualizado.emit(response);
           this.cerrarModal.emit();
         },
         error:(response) => {

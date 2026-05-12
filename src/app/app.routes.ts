@@ -8,6 +8,8 @@ import { CrearMarcaComponent } from './components/marca/crear-marca/crear-marca.
 import { ListarMarcasComponent } from './components/marca/listar-marcas/listar-marcas.component';
 import { VentaComponent } from './components/venta/venta/venta.component';
 import { pinGuard } from './guard/pin.guard';
+import { ListarCategoriaComponent } from './components/categoria/listar-categorias/listar-categorias.component';
+import { ListarUnidadesMedidaComponent } from './components/unidadMedida/listar-unidades-medida/listar-unidades-medida.component';
 
 export const routes: Routes = [
     {path: 'home', component: HomeComponent},
@@ -24,6 +26,11 @@ export const routes: Routes = [
     // {path: 'marca/crear-marca', component: CrearMarcaComponent},
     {path: 'marca/listar-marcas', component: ListarMarcasComponent},
 
+    //Categorias
+    {path: 'categoria/listar-categorias', component: ListarCategoriaComponent},
+
+    // Unidades de Medida
+    {path: 'unidadMedida/listar-unidades-medida', component: ListarUnidadesMedidaComponent},
     // Redirecciones al final
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: '**', redirectTo: 'home' }

@@ -1,8 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, output, ViewChild } from '@angular/core';
 import { MarcaUpsertDto } from '../../../models/dtos/requests/marca-upsert-dto';
 import { FormsModule } from '@angular/forms';
 import { MarcaService } from '../../../services/marca.service';
 import { ToastrService } from 'ngx-toastr';
+import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 
 @Component({
   selector: 'app-crear-marca',
@@ -13,6 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 export class CrearMarcaComponent {
 
   @ViewChild('inputNombre') inputNombre!: ElementRef<HTMLInputElement>;
+
+  @Output() objetoCreado = new EventEmitter<MarcaResponseDto>();
 
   constructor(private marcaService: MarcaService,
       private toastrService: ToastrService){}
@@ -31,21 +34,11 @@ export class CrearMarcaComponent {
           nombre : ''
         }
 
+        // Regresamos el objeto creado
+        this.objetoCreado.emit(response);
+
         //Nos posicionamos en el input
         this.enfocarInput();
-      },
-      error:(err) => {
-      if (err.status === 400) {
-        console.error(err.error.mensaje);
-      } else if (err.status === 500) {
-        console.error('Error interno del servidor: ' + err.error);
-      } else if (err.status === 0) {
-        console.error('No se pudo conectar con el servidor');
-      } else {
-        console.error('Ocurrió un error inesperado');
-      }
-
-      this.toastrService.error(err.error.mensaje);
       }
     })
   }

@@ -21,7 +21,7 @@ export class CategoriaService {
   }
 
   // Devuelve un objeto de Categoria
-  public getCategoriaPorId(idCategoria: number): Observable<CategoriaResponseDto> {
+  public getCategoria(idCategoria: number): Observable<CategoriaResponseDto> {
     return this.http.get<CategoriaResponseDto>(`${this.urlBase}/obtener_categoria/${idCategoria}`);
   }
 

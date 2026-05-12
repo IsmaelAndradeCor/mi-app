@@ -1,0 +1,28 @@
+<h3>Crear Categoria</h3>
+<div class="form-section">
+    <div class="row">
+        <div class="col-4">
+            <div class="input-group">
+                <span class="input-group-text">Nombre</span>
+                <input #inputNombre class="form-control" type="text" autocomplete="off" [(ngModel)]="unidadMedidaUpsertDto.nombre">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="input-group">
+                <span class="input-group-text">Clave</span>
+                <input #inputNombre class="form-control" type="text" autocomplete="off" [(ngModel)]="unidadMedidaUpsertDto.clave">
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="input-group">
+                <div class="input-group-text">
+                    <input class="form-check-input mt-0" type="checkbox" [(ngModel)]="unidadMedidaUpsertDto.permiteDecimales">
+                </div>
+                <span class="input-group-text">Permite Decimales</span>
+            </div>
+        </div>
+        <div class="col-2">
+            <button class="btn btn-success w-100" type="button" (click)="crearUnidadMedida()">Crear Unidad Medida</button>
+        </div>
+    </div>
+</div>

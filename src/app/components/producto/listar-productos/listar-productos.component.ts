@@ -49,7 +49,7 @@ export class ListarProductosComponent implements OnInit {
   productoActualizar: ProductoResponseDto | null = null;;
   mostrarActualizarProducto: boolean = false;
 
-  mostrarConfirmarEliminarProducto: boolean = false;
+  mostrarConfirmarEliminar: boolean = false;
   idProductoEliminar: number | null = null;
 
   productosPorId: Map<number, ProductoResponseDto> = new Map();  // ← Tu diccionario
@@ -133,7 +133,7 @@ export class ListarProductosComponent implements OnInit {
 
         // 2. Recrear el array sin ese producto
         this.productosDto = this.productosDto.filter(x => x.id !== id);
-        this.filtrarProductos();
+        this.filtrarTabla();
 
         // 3. Muesta el mensaje de exito
         this.toastrService.success('Producto eliminado con éxito.')
@@ -165,15 +165,15 @@ export class ListarProductosComponent implements OnInit {
 
   mostrarModalConfirmarEliminar(id: number): void {
     this.idProductoEliminar = id;
-    this.mostrarConfirmarEliminarProducto = true;
+    this.mostrarConfirmarEliminar = true;
   }
 
   cerrarModalConfirmarEliminar(): void {
-    this.mostrarConfirmarEliminarProducto = false;
+    this.mostrarConfirmarEliminar = false;
     this.idProductoEliminar = null;
   }
 
-  filtrarProductos(): void {
+  filtrarTabla(): void {
     const texto = this.textoBusqueda.trim().toLowerCase();
 
     if (!texto) {
@@ -185,5 +185,10 @@ export class ListarProductosComponent implements OnInit {
       p.codigo.toLowerCase().includes(texto) ||
       p.nombre.toLowerCase().includes(texto)
     );
+  }
+
+  limpiarTextoBusqueda(): void {
+    this.textoBusqueda = '';
+    this.filtrarTabla();
   }
 }

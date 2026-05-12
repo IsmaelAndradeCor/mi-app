@@ -1,33 +1,37 @@
 <div class="component-page">
-    <app-crear-marca
-        (objetoCreado)="marcaCreada($event)"    
-    ></app-crear-marca>
+    <app-crear-unidad-medida
+        (objetoCreado)="unidadMedidaCreada($event)"
+    ></app-crear-unidad-medida>
 
     <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2 mt-3">
-        <h3 class="mb-0">Listado de Marcas</h3>
+        <h3 class="mb-0">Listado de Unidades de Medida</h3>
         <div class="input-group" style="max-width: 350px;">
             <input type="text" class="form-control" placeholder="Buscar por nombre" [(ngModel)]="textoBusqueda" (input)="filtrarTabla()">
             <button class="btn btn-danger" type="button" (click)="limpiarTextoBusqueda()"><i class="fa-solid fa-eraser"></i></button>
         </div>
     </div>
     <div class="form-section form-section-fill">
-        @if (textoBusqueda && !marcasFiltradas.length) {
-        <p>No existen Marcas con ese nombre.</p>
+        @if (textoBusqueda && !unidadesMedidaFiltradas.length) {
+        <p>No existen Unidades de Medida con ese nombre.</p>
         }
-        @else if (!marcasFiltradas.length) {
-        <p>No existen Marcas cargadas</p>
+        @else if (!unidadesMedidaFiltradas.length) {
+        <p>No existen Unidades de Medida sargadas</p>
         }
-        @else if (marcasFiltradas) {
+        @else if (unidadesMedidaFiltradas) {
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Nombre</th>
+                    <th>Clave</th>
+                    <th>Permite decimales</th>
                     <th style="width: 10%; text-align: center;">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let i of marcasFiltradas; index as j">
+                <tr *ngFor="let i of unidadesMedidaFiltradas; index as j">
                     <td>{{i.nombre}}</td>
+                    <td>{{i.clave}}</td>
+                    <td>{{i.permiteDecimales}}</td>
                     <td style="width: 10%; text-align: center;">
                         <button class="btn btn-sm btn-warning me-3" type="button" (click)="mostrarModalActualizarPorId(i.id)"><i class="fa-solid fa-pen-to-square"></i></button>                     
                         <button class="btn btn-sm btn-danger" type="button" (click)="mostrarModalConfirmarEliminar(i.id)"><i class="fa-solid fa-trash"></i></button> 
@@ -39,19 +43,19 @@
     </div>
 </div>
 
-<app-actualizar-marca
+<app-actualizar-unidad-medida
     *ngIf="mostrarActualizar"
     [objetoActualizar]="objetoActualizar"
     [mostrarActualizar]="mostrarActualizar"
     (cerrarModal)="cerrarModalActualizar()"
     (objetoActualizado)="actualizarEnLista($event)"
-></app-actualizar-marca>
+></app-actualizar-unidad-medida>
 
 <app-confirmar-modal
   *ngIf="mostrarEliminar"
   [mostrarConfirmarEliminar]="mostrarEliminar"
   [titulo]="'Confirmar eliminación de '+ nombreEliminar"
-  [mensaje]="'¿Deseas eliminar esta Marca?'"
+  [mensaje]="'¿Deseas eliminar esta Unidad de Medida?'"
   [id]="idEliminar!"
   (confirmarModal)="eliminarPorId($event)"
   (cerrarModal)="cerrarModalConfirmarEliminar()"
