@@ -1,77 +1,59 @@
-import { Component, OnDestroy } from '@angular/core';
-import { NavigationStart, Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { Component, computed } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 import { ThemeService } from '../../services/theme.service';
 import { CommonModule } from '@angular/common';
-import { PinAccessService } from '../../services/pin-access.service';
-import { ToastrService } from 'ngx-toastr';
-import { ModalPinComponent } from '../../modals/modal-pin/modal-pin.component';
-import { Subscription } from 'rxjs';
+import { AuthService } from '../../core/auth/auth.service';
+
+interface NavItem {
+  label: string;
+  route: string;
+  roles: string[];
+}
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule, ModalPinComponent],
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent implements OnDestroy {
+export class NavbarComponent {
+
+
+  navItems: NavItem[] = [
+    { label: 'Inicio', route: '/home', roles: ['Administrador', 'Empleado'] },
+    { label: 'Venta', route: '/venta/realizar-venta', roles: ['Administrador', 'Empleado'] },
+    { label: 'Productos', route: '/producto/listar-productos', roles: ['Administrador'] },
+    { label: 'Marcas', route: '/marca/listar-marcas', roles: ['Administrador'] },
+    { label: 'Categorias', route: '/categoria/listar-categorias', roles: ['Administrador'] },
+    { label: 'Unidades Medida', route: '/unidadMedida/listar-unidades-medida', roles: ['Administrador'] },
+    { label: 'Historial Ventas', route: '/venta/venta', roles: ['Administrador'] }
+  ];
+
+  visibleNavItems = computed(() => {
+    const userRoles = this.authService.roles();
+    return this.navItems.filter(item =>
+      item.roles.some(role => userRoles.includes(role))
+    );
+  });
 
   constructor(
     public themeService: ThemeService,
-    private router: Router,
-    private pinAccessService: PinAccessService,
-    private toastrService: ToastrService
-  ) {
-    this.routerSub = this.router.events.subscribe(event => {
-      if (event instanceof NavigationStart) {
-      const destino = event.url;
-
-      if (!destino.startsWith(this.rutaProtegidaPendiente)) {
-        this.pinAccessService.revocarAcceso();
-      }
-      }
-    });
-  }
-
-  mostrarModalPin = false;
-  rutaProtegidaPendiente = '/venta/venta';
-  private routerSub: Subscription;
+    public authService: AuthService,
+    private router: Router
+  ) {}
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
   }
 
-  abrirVistaProtegida(): void {
-    if (this.pinAccessService.tieneAcceso()) {
-      this.router.navigate([this.rutaProtegidaPendiente]);
-      return;
-    }
-
-    this.mostrarModalPin = true;
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
-  cancelarPin(): void {
-    this.mostrarModalPin = false;
-    this.pinAccessService.revocarAcceso();
-    this.router.navigate(['/home']);
-  }
-
-  confirmarPin(pin: string): void {
-    this.pinAccessService.validarPin(pin).subscribe({
-      next: (response) => {
-        if (response.autorizado) {
-          this.pinAccessService.concederAcceso();
-          this.mostrarModalPin = false;
-          this.router.navigate([this.rutaProtegidaPendiente]);
-        }
-      },
-      error: () => {
-        this.toastrService.error('Pin incorrecto.');
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.routerSub.unsubscribe();
+  esAdmin(): boolean {
+    console.log(this.authService)
+    return this.authService.hasRole('Administrador');
   }
 }

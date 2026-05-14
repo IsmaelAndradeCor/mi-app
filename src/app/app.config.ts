@@ -5,34 +5,19 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { errorInterceptor } from './core/interceptors/errorInterceptor.interceptor';
-
-// export const appConfig: ApplicationConfig = {
-//   providers: [
-//     provideZoneChangeDetection({ eventCoalescing: true }), 
-//     provideRouter(routes),
-//     provideHttpClient(), 
-//     provideClientHydration(withEventReplay()),
-//     provideHttpClient(withFetch()),
-//     provideAnimations(),
-//     provideToastr()
-//   ]
-// };
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withFetch()),
-    provideAnimations(),
-    provideToastr(),
     provideHttpClient(
-      withInterceptors([loadingInterceptor])
+      withFetch(),
+      withInterceptors([authInterceptor, loadingInterceptor, errorInterceptor])
     ),
-    provideHttpClient(
-      withInterceptors([errorInterceptor])
-    )
+    provideAnimations(),
+    provideToastr()
   ]
 };
