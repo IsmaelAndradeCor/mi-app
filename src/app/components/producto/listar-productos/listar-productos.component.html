@@ -7,6 +7,13 @@
         </div>
     </div>
     <div class="form-section form-section-fill">
+        @if (textoBusqueda && !productosFiltrados.length) {
+        <p>No existen Productos con ese nombre.</p>
+        }
+        @else if (!productosFiltrados.length) {
+        <p>No existen Productos</p>
+        }
+        @else if (productosFiltrados) {
         <table class="table table-sm table-striped table-bordered">
             <thead>
                 <tr>
@@ -39,6 +46,7 @@
                 </tr>
             </tbody>
         </table>
+        }
     </div>
 </div>
 

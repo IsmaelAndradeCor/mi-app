@@ -3,10 +3,12 @@ import { CategoriaService } from '../../../services/categoria.service';
 import { ToastrService } from 'ngx-toastr';
 import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-response-dto';
 import { CategoriaUpsertDto } from '../../../models/dtos/requests/categoria-upsert-dto';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-actualizar-categoria',
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './actualizar-categoria.component.html',
   styleUrl: './actualizar-categoria.component.scss'
 })

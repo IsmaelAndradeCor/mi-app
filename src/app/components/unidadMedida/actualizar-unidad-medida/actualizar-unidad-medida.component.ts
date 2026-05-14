@@ -1,16 +1,18 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UnidadMedidaService } from '../../../services/unidad-medida.service';
 import { ToastrService } from 'ngx-toastr';
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
 import { UnidadMedidaUpsertDto } from '../../../models/dtos/requests/unidad-medida-upsert-dto';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-actualizar-unidad-medida',
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './actualizar-unidad-medida.component.html',
   styleUrl: './actualizar-unidad-medida.component.scss'
 })
-export class ActualizarUnidadMedidaComponent {
+export class ActualizarUnidadMedidaComponent implements OnInit {
 
   constructor(private unidadMedidaService: UnidadMedidaService,
               private toastrService: ToastrService
@@ -22,6 +24,12 @@ export class ActualizarUnidadMedidaComponent {
   @Input() objetoActualizar: UnidadMedidaResponseDto | null = null;
   @Input() mostrarActualizar = false;
 
+  ngOnInit(): void {
+    this.unidadMedidaNombre = this.objetoActualizar?.nombre ?? '';
+    this.unidadMedidaClave = this.objetoActualizar?.clave ?? '';
+    this.unidadMedidaPermiteDecimales = this.objetoActualizar?.permiteDecimales ?? false;
+  }
+
   unidadMedidaUpsertDto: UnidadMedidaUpsertDto = {
     nombre : '',
     clave : '',
@@ -29,6 +37,8 @@ export class ActualizarUnidadMedidaComponent {
   }
 
   unidadMedidaNombre: string = '';
+  unidadMedidaClave: string = '';
+  unidadMedidaPermiteDecimales: boolean = false;
 
   cerrar() {
     this.cerrarModal.emit();  // Emite evento al padre
@@ -37,6 +47,8 @@ export class ActualizarUnidadMedidaComponent {
   guardarCambios() {
     if (this.objetoActualizar) {
       this.unidadMedidaUpsertDto.nombre = this.unidadMedidaNombre;
+      this.unidadMedidaUpsertDto.clave = this.unidadMedidaClave;
+      this.unidadMedidaUpsertDto.permiteDecimales = this.unidadMedidaPermiteDecimales;
 
       this.unidadMedidaService.putUnidadMedida(this.objetoActualizar.id, this.unidadMedidaUpsertDto).subscribe({
         next:(response) => {
