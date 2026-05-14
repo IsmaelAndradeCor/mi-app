@@ -25,9 +25,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      else if (error.status === 401) {
-        toastr.error('No autorizado.');
-      }
+      // else if (error.status === 401) {
+      //   toastr.error('No autorizado.');
+      // }
 
       else if (error.status === 403) {
         toastr.error('Acceso denegado.');

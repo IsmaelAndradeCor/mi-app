@@ -5,6 +5,7 @@ import { VentaService } from '../../services/venta.service';
 import { GenerarVentasDTO } from '../../models/generar-ventas-dto';
 import { ProductoResponseDto } from '../../models/dtos/responses/producto-response-dto';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productoService: ProductoService,
+    public authService: AuthService,
     private toastrService: ToastrService
   ) {}
 

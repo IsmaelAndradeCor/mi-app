@@ -14,6 +14,7 @@ import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
 import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
 import { FormsModule } from '@angular/forms';
+import { CrearProductoComponent } from '../crear-producto/crear-producto.component';
 
 // // Simular API
 // const fetchProductos = async (): Promise<Producto[]> => {
@@ -22,7 +23,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-listar-productos',
-  imports: [CommonModule, ActualizarProductoComponent, ConfirmarModalComponent, FormsModule],
+  imports: [CommonModule, ActualizarProductoComponent, CrearProductoComponent, ConfirmarModalComponent, FormsModule],
   templateUrl: './listar-productos.component.html',
   styleUrl: './listar-productos.component.scss'
 })
