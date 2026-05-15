@@ -23,7 +23,7 @@ export class NavbarComponent {
   navItems: NavItem[] = [
     { label: 'Inicio', route: '/home', permissions: ['home.ver'] },
     { label: 'Venta', route: '/venta/realizar-venta', permissions: ['ventas.realizar'] },
-    { label: 'Productos', route: '/producto/listar-productos', permissions: ['productos.ver'] },
+    { label: 'Productos', route: '/producto/pagina-productos', permissions: ['productos.ver'] },
     { label: 'Marcas', route: '/marca/listar-marcas', permissions: ['marcas.ver'] },
     { label: 'Categorias', route: '/categoria/listar-categorias', permissions: ['categorias.ver'] },
     { label: 'Unidades Medida', route: '/unidadMedida/listar-unidades-medida', permissions: ['unidadesmedida.ver'] },
@@ -41,8 +41,8 @@ export class NavbarComponent {
     public authService: AuthService,
     private router: Router
   ) {
-    console.log('Roles:', this.authService.roles());
-    console.log('Permissions:', this.authService.permissions());
+    // console.log('Roles:', this.authService.roles());
+    // console.log('Permissions:', this.authService.permissions());
   }
 
   toggleTheme(): void {

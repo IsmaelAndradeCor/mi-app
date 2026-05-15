@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ConfirmarModalComponent {
 
-  @Input() mostrarConfirmarEliminar = false;
+  @Input() mostrarConfirmar = false;
   @Input() titulo: string = "";
   @Input() mensaje: string = "";
   @Input() id: number = 0;

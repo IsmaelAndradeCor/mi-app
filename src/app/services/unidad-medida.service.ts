@@ -35,7 +35,7 @@ export class UnidadMedidaService {
     return this.http.put<UnidadMedidaResponseDto>(`${this.urlBase}/actualizar_unidad_medida/${idUnidadMedida}`, unidadMedidaUpsertDto);
   }
 
-  // Elimina con soft delete a partir del idUnidadMedida
+  // Desactiva con soft delete a partir del idUnidadMedida
   public deleteUnidadMedida(idUnidadMedida: number): Observable<void> {
     return this.http.delete<void>(`${this.urlBase}/eliminar_unidad_medida/${idUnidadMedida}`);
   }

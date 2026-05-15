@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { ListarProductosComponent } from './components/producto/listar-productos/listar-productos.component';
-import { CrearProductoComponent } from './components/producto/crear-producto/crear-producto.component';
 import { RealizarVentaComponent } from './components/venta/realizar-venta/realizar-venta.component';
 import { ListarMarcasComponent } from './components/marca/listar-marcas/listar-marcas.component';
 import { VentaComponent } from './components/venta/venta/venta.component';
@@ -11,6 +9,9 @@ import { LoginComponent } from './components/auth/login/login.component';
 import { authGuard } from './core/auth/auth.guard';
 import { permissionGuard } from './core/auth/permission.guard';
 import { SinAccesoComponent } from './components/sin-acceso/sin-acceso.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ListarProveedoresComponent } from './components/Proveedor/listar-proveedores/listar-proveedores.component';
+import { PaginaProductosComponent } from './components/producto/pagina-productos/pagina-productos.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -23,18 +24,12 @@ export const routes: Routes = [
     data: { permissions: ['home.ver'] }
   },
   {
-    path: 'producto/crear-producto',
-    component: CrearProductoComponent,
-    canActivate: [authGuard, permissionGuard],
-    data: { permissions: ['productos.crear'] }
-  },
-  {
-    path: 'producto/listar-productos',
-    component: ListarProductosComponent,
+    path: 'producto/pagina-productos',
+    component: PaginaProductosComponent,
     canActivate: [authGuard, permissionGuard],
     data: { permissions: ['productos.ver'] }
   },
-  {
+  { 
     path: 'venta/realizar-venta',
     component: RealizarVentaComponent,
     canActivate: [authGuard, permissionGuard],
@@ -64,7 +59,13 @@ export const routes: Routes = [
     canActivate: [authGuard, permissionGuard],
     data: { permissions: ['unidadesmedida.ver'] }
   },
-
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' }
+  {
+    path: 'proveedor/listar-proveedores',
+    component: ListarProveedoresComponent,
+    canActivate: [authGuard, permissionGuard],
+    data: { Permissions: ['proveedores.ver']}
+  },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '404', component: NotFoundComponent },
+  { path: '**', redirectTo: '404' }
 ];

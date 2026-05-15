@@ -24,11 +24,11 @@ export class ListarCategoriaComponent implements OnInit {
   categoriasFiltradas: CategoriaResponseDto[] = [];
   objetoActualizar: CategoriaResponseDto | null = null;
 
-  idEliminar: number | null = null;
-  nombreEliminar: string = '';
+  idDesactivar: number | null = null;
+  nombreDesactivar: string = '';
 
   mostrarActualizar: boolean = false;
-  mostrarEliminar: boolean = false;
+  mostrarDesactivar: boolean = false;
 
   textoBusqueda: string = '';
 
@@ -74,30 +74,30 @@ export class ListarCategoriaComponent implements OnInit {
     this.cerrarModalActualizar();
   }
 
-  mostrarModalConfirmarEliminar(idCategoria: number): void {
-    this.idEliminar = idCategoria;
-    this.nombreEliminar = this.categorias.find((i) => i.id === idCategoria)?.nombre ?? '';
-    this.mostrarEliminar = true;
+  mostrarModalConfirmarDesactivar(idCategoria: number): void {
+    this.idDesactivar = idCategoria;
+    this.nombreDesactivar = this.categorias.find((i) => i.id === idCategoria)?.nombre ?? '';
+    this.mostrarDesactivar = true;
   }
 
-  eliminarPorId(idCategoria: number): void {
+  desactivarPorId(idCategoria: number): void {
     this.categoriaService.deleteCategoria(idCategoria).subscribe({
       next:() => {
         this.categorias = this.categorias.filter(x => x.id !== idCategoria);
         this.filtrarTabla();
 
-        this.toastrService.success('Categoria eliminada con éxito');
+        this.toastrService.success('Categoria desactivada con éxito');
       },
       error: (error) => {
-        this.toastrService.error('Ocurrió un error al eliminar la Categoria, por favor contacte al administrador.');
+        this.toastrService.error('Ocurrió un error al desactivar la Categoria, por favor contacte al administrador.');
       }
     })
   }
 
-  cerrarModalConfirmarEliminar(): void {
-    this.mostrarEliminar = false;
-    this.idEliminar = null;
-    this.nombreEliminar = '';
+  cerrarModalConfirmar(): void {
+    this.mostrarDesactivar = false;
+    this.idDesactivar = null;
+    this.nombreDesactivar = '';
   }
 
   filtrarTabla(): void {

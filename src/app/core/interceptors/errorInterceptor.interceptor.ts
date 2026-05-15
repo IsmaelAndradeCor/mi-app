@@ -8,6 +8,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      debugger;
       if (error.status === 400) {
         const errors = error.error?.errors;
 
@@ -25,9 +26,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      // else if (error.status === 401) {
-      //   toastr.error('No autorizado.');
-      // }
+      else if (error.status === 401) {
+        if (error.error?.mensaje) {
+          toastr.error(error.error.mensaje);
+        } else {
+          toastr.error('No autorizado.');
+        }
+      }
 
       else if (error.status === 403) {
         toastr.error('Acceso denegado.');

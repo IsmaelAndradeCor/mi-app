@@ -39,11 +39,11 @@ export class RealizarVentaComponent implements OnInit {
   carrito: ItemCarrito[] = [];
 
   ngOnInit() {
-    this.getProductos();
+    this.getProductosActivos();
   }
 
-  getProductos(): void {
-    this.productoService.getProductos().subscribe({
+  getProductosActivos(): void {
+    this.productoService.getProductosActivos().subscribe({
       next:(prodcutosResponse) => {
         this.productos = prodcutosResponse;
 
@@ -51,7 +51,7 @@ export class RealizarVentaComponent implements OnInit {
           this.productos.map(producto => [producto.codigo, producto])
         );
         
-        console.log('Map creado con', this.productosPorCodigo.size, 'productos');
+        // console.log('Map creado con', this.productosPorCodigo.size, 'productos');
       }
     });
   }

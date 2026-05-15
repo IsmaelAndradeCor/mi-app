@@ -35,7 +35,7 @@ export class CategoriaService {
     return this.http.put<CategoriaResponseDto>(`${this.urlBase}/actualizar_categoria/${idCategoria}`, categoriaUpsertDto);
   }
 
-  // Elimina con soft delete apartir del idCategoria
+  // Desactiva con soft delete apartir del idCategoria
   public deleteCategoria(idCategoria: number): Observable<void> {
     return this.http.delete<void>(`${this.urlBase}/eliminar_categoria/${idCategoria}`);
   }

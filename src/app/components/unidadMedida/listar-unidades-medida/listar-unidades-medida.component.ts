@@ -24,11 +24,11 @@ export class ListarUnidadesMedidaComponent {
   unidadesMedidaFiltradas: UnidadMedidaResponseDto[] = [];
   objetoActualizar: UnidadMedidaResponseDto | null = null;
 
-  idEliminar: number | null = null;
-  nombreEliminar: string = '';
+  idDesactivar: number | null = null;
+  nombreDesactivar: string = '';
 
   mostrarActualizar: boolean = false;
-  mostrarEliminar: boolean = false;
+  mostrarDesactivar: boolean = false;
 
   textoBusqueda: string = '';
 
@@ -74,30 +74,30 @@ export class ListarUnidadesMedidaComponent {
     this.cerrarModalActualizar();
   }
 
-  mostrarModalConfirmarEliminar(idUnidadMedida: number): void {
-    this.idEliminar = idUnidadMedida;
-    this.nombreEliminar = this.unidadesMedida.find((i) => i.id === idUnidadMedida)?.nombre ?? '';
-    this.mostrarEliminar = true;
+  mostrarModalConfirmarDesactivar(idUnidadMedida: number): void {
+    this.idDesactivar = idUnidadMedida;
+    this.nombreDesactivar = this.unidadesMedida.find((i) => i.id === idUnidadMedida)?.nombre ?? '';
+    this.mostrarDesactivar = true;
   }
 
-  eliminarPorId(idUnidadMedida: number): void {
+  desactivarPorId(idUnidadMedida: number): void {
     this.unidadMedidaService.deleteUnidadMedida(idUnidadMedida).subscribe({
       next:() => {
         this.unidadesMedida = this.unidadesMedida.filter(x => x.id !== idUnidadMedida);
         this.filtrarTabla();
 
-        this.toastrService.success('Unidad de Medida eliminada con éxito');
+        this.toastrService.success('Unidad de Medida desactivada con éxito');
       },
       error: (error) => {
-        this.toastrService.error('Ocurrió un error al eliminar la Unidad de Medida, por favor contacte al administrador.');
+        this.toastrService.error('Ocurrió un error al desactivar la Unidad de Medida, por favor contacte al administrador.');
       }
     })
   }
 
-  cerrarModalConfirmarEliminar(): void {
-    this.mostrarEliminar = false;
-    this.idEliminar = null;
-    this.nombreEliminar = '';
+  cerrarModalConfirmar(): void {
+    this.mostrarDesactivar = false;
+    this.idDesactivar = null;
+    this.nombreDesactivar = '';
   }
 
   filtrarTabla(): void {

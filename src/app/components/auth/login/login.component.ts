@@ -13,6 +13,7 @@ import { AuthService } from '../../../core/auth/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+
   userName = '';
   password = '';
   cargando = false;
@@ -35,7 +36,7 @@ export class LoginComponent {
       userName: this.userName,
       password: this.password
     }).subscribe({
-      next: (response) => {
+      next: () => {
         this.cargando = false;
 
         if (this.authService.hasPermission('home.ver')) {
@@ -49,10 +50,11 @@ export class LoginComponent {
         }
 
         this.router.navigate(['/sin-acceso']);
-      },
+      }
+      ,
       error: () => {
         this.cargando = false;
-        this.toastrService.error('Credenciales inválidas.');
+        // this.toastrService.error('Credenciales inválidas.');
       }
     });
   }

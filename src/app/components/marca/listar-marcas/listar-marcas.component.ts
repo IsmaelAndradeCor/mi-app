@@ -24,11 +24,11 @@ export class ListarMarcasComponent implements OnInit {
   marcasFiltradas: MarcaResponseDto[] = [];
   objetoActualizar: MarcaResponseDto | null = null;
 
-  idEliminar: number | null = null;
-  nombreEliminar: string = '';
+  idDesactivar: number | null = null;
+  nombreDesactivar: string = '';
 
   mostrarActualizar: boolean = false;
-  mostrarEliminar: boolean = false;
+  mostrarDesactivar: boolean = false;
 
   textoBusqueda: string = '';
 
@@ -74,30 +74,30 @@ export class ListarMarcasComponent implements OnInit {
     this.cerrarModalActualizar();
   }
 
-  mostrarModalConfirmarEliminar(idMarca: number): void {
-    this.idEliminar = idMarca;
-    this.nombreEliminar = this.marcas.find((i) => i.id === idMarca)?.nombre ?? '';
-    this.mostrarEliminar = true;
+  mostrarModalConfirmarDesactivar(idMarca: number): void {
+    this.idDesactivar = idMarca;
+    this.nombreDesactivar = this.marcas.find((i) => i.id === idMarca)?.nombre ?? '';
+    this.mostrarDesactivar = true;
   }
 
-  eliminarPorId(idMarca: number): void {
+  desactivarPorId(idMarca: number): void {
     this.marcaService.deleteMarca(idMarca).subscribe({
       next:() => {
         this.marcas = this.marcas.filter(x => x.id !== idMarca);
         this.filtrarTabla();
 
-        this.toastrService.success('Marca eliminada con éxito');
+        this.toastrService.success('Marca desactivada con éxito');
       },
       error: (error) => {
-        this.toastrService.error('Ocurrió un error al eliminar la Marca, por favor contacte al administrador.');
+        this.toastrService.error('Ocurrió un error al desactivar la Marca, por favor contacte al administrador.');
       }
     })
   }
 
-  cerrarModalConfirmarEliminar(): void {
-    this.mostrarEliminar = false;
-    this.idEliminar = null;
-    this.nombreEliminar = '';
+  cerrarModalConfirmar(): void {
+    this.mostrarDesactivar = false;
+    this.idDesactivar = null;
+    this.nombreDesactivar = '';
   }
 
   filtrarTabla(): void {

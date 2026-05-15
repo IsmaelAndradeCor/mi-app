@@ -1,29 +1,27 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActualizarProductoComponent } from '../actualizar-producto/actualizar-producto.component';
 import { CommonModule } from '@angular/common';
-import { ProductoService } from '../../../services/producto.service';
-import { ToastrService } from 'ngx-toastr';
+import { Component, OnInit } from '@angular/core';
 import { ConfirmarModalComponent } from '../../../modals/confirmar-modal/confirmar-modal.component';
-import { ProductoResponseDto } from '../../../models/dtos/responses/producto-response-dto';
+import { FormsModule } from '@angular/forms';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
+import { ProductoService } from '../../../services/producto.service';
 import { MarcaService } from '../../../services/marca.service';
 import { ProveedorService } from '../../../services/proveedor.service';
+import { ToastrService } from 'ngx-toastr';
 import { CategoriaService } from '../../../services/categoria.service';
 import { UnidadMedidaService } from '../../../services/unidad-medida.service';
 import { CategoriaResponseDto } from '../../../models/dtos/responses/categoria-response-dto';
 import { MarcaResponseDto } from '../../../models/dtos/responses/marca-response-dto';
 import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-medida-response-dto';
 import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
-import { FormsModule } from '@angular/forms';
-import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
+import { ProductoResponseDto } from '../../../models/dtos/responses/producto-response-dto';
 
 @Component({
-  selector: 'app-listar-productos',
-  imports: [CommonModule, ActualizarProductoComponent, ConfirmarModalComponent, FormsModule, HasPermissionDirective],
-  templateUrl: './listar-productos.component.html',
-  styleUrl: './listar-productos.component.scss'
+  selector: 'app-listar-productos-inactivos',
+  imports: [CommonModule, ConfirmarModalComponent, FormsModule, HasPermissionDirective],
+  templateUrl: './listar-productos-inactivos.component.html',
+  styleUrl: './listar-productos-inactivos.component.scss'
 })
-
-export class ListarProductosComponent implements OnInit {
+export class ListarProductosInactivosComponent implements OnInit {
 
   constructor(
     private productoService: ProductoService,
@@ -46,14 +44,14 @@ export class ListarProductosComponent implements OnInit {
   mostrarActualizarProducto: boolean = false;
 
   mostrarConfirmarDesactivar: boolean = false;
-  idProductoDesactivar: number | null = null;
+  idProductoActivar: number | null = null;
 
   productosPorId: Map<number, ProductoResponseDto> = new Map();  // ← Tu diccionario
 
   textoBusqueda: string = '';
   
   ngOnInit() {
-    this.getProductosActivos();
+    this.getProductosInactivos();
     this.getCategorias();
     this.getMarcas();
     this.getUnidadesMedida();
@@ -61,10 +59,10 @@ export class ListarProductosComponent implements OnInit {
   }
 
 
-  getProductosActivos(): void {
+  getProductosInactivos(): void {
     // Convierte el arreglo a Map UNA SOLA VEZ al cargar
 
-    this.productoService.getProductosActivos().subscribe({
+    this.productoService.getProductosInactivos().subscribe({
       next:(prodcutosResponse) => {
         this.productosDto = prodcutosResponse;
         this.productosFiltrados = [...this.productosDto];
@@ -121,9 +119,9 @@ export class ListarProductosComponent implements OnInit {
     return item.id;
   }
 
-  desactivarProductoPorCodigo(id: number): void {
+  activarProductoPorCodigo(id: number): void {
 
-    this.productoService.deactivateProducto(id).subscribe({
+    this.productoService.activateProducto(id).subscribe({
       next:() => {
         // 1. Eliminar del Map (rápido)
         this.productosPorId.delete(id);
@@ -133,10 +131,10 @@ export class ListarProductosComponent implements OnInit {
         this.filtrarTabla();
 
         // 3. Muesta el mensaje de exito
-        this.toastrService.success('Producto desactivado con éxito.')
+        this.toastrService.success('Producto activado con éxito.')
       },
       error: (error) => {
-        this.toastrService.error('Ocurrió un error al desactivar el producto, por favor contacte al administrador.');
+        this.toastrService.error('Ocurrió un error al activar el producto, por favor contacte al administrador.');
       }
     });
   }
@@ -160,14 +158,14 @@ export class ListarProductosComponent implements OnInit {
     this.productoActualizar = null;
   }
 
-  mostrarModalConfirmarDesactivar(id: number): void {
-    this.idProductoDesactivar = id;
+  mostrarModalConfirmar(id: number): void {
+    this.idProductoActivar = id;
     this.mostrarConfirmarDesactivar = true;
   }
 
   cerrarModalConfirmar(): void {
     this.mostrarConfirmarDesactivar = false;
-    this.idProductoDesactivar = null;
+    this.idProductoActivar = null;
   }
 
   filtrarTabla(): void {

@@ -35,7 +35,7 @@ export class ProveedorService {
     return this.http.put<ProveedorResponseDto>(`${this.urlBase}/actualizar_proveedor/${idProveedor}`, proveedorUpsertDto);
   }
 
-  // Elimina con soft delete a partir del idProveedor
+  // Desactiva con soft delete a partir del idProveedor
   public deleteProveedor(idProveedor: number): Observable<void> {
     return this.http.delete<void>(`${this.urlBase}/eliminar_proveedor/${idProveedor}`);
   }

@@ -63,8 +63,6 @@ export class CrearProductoComponent implements OnInit {
   marcaTexto: string = '';
   selectedProveedor: number = 0;
 
-  componenteExpandido: boolean = false;
-
   getCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
       next:(response) => {
@@ -210,9 +208,5 @@ export class CrearProductoComponent implements OnInit {
       this.productoUpsertDto.idsProveedores.filter(p => p !== id);
       setTimeout(() => this.selectedProveedor = 0);
 
-  }
-
-  expandirComponente(): void {
-    this.componenteExpandido = !this.componenteExpandido;
   }
 }

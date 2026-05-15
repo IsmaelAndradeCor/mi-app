@@ -15,8 +15,12 @@ export class ProductoService {
   private http = inject(HttpClient);
   private urlBase = environment.apiURL + '/Producto';
 
-  public getProductos(): Observable<ProductoResponseDto[]> {
-    return this.http.get<ProductoResponseDto[]>(this.urlBase + '/listar_productos');
+  public getProductosActivos(): Observable<ProductoResponseDto[]> {
+    return this.http.get<ProductoResponseDto[]>(this.urlBase + '/listar_productos_activos');
+  }
+
+  public getProductosInactivos(): Observable<ProductoResponseDto[]> {
+    return this.http.get<ProductoResponseDto[]>(this.urlBase + '/listar_productos_inactivos');
   }
 
   public getProductosStockMinimo(): Observable<ProductoResponseDto[]> {
@@ -35,7 +39,11 @@ export class ProductoService {
     return this.http.put<void>(`${this.urlBase}/actualizar_producto`, producto);
   }
 
-  public deleteProducto(idProducto: number): Observable<void> {
-    return this.http.delete<void>(`${this.urlBase}/eliminar_producto/${idProducto}`);
+  public activateProducto(idProducto: number): Observable<void> {
+    return this.http.put<void>(`${this.urlBase}/activar_producto/${idProducto}`, {});
+  }
+  
+  public deactivateProducto(idProducto: number): Observable<void> {
+    return this.http.delete<void>(`${this.urlBase}/desactivar_producto/${idProducto}`);
   }
 }
