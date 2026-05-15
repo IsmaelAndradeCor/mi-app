@@ -40,6 +40,18 @@ export class AuthService {
 
     return Array.isArray(roleClaim) ? roleClaim as string[] : [roleClaim as string];
   });
+  permissions = computed<string[]>(() => {
+  const payload = this.currentUserSignal();
+  if (!payload) return [];
+
+  const permissionClaim = payload['permission'];
+
+  if (!permissionClaim) return [];
+
+  return Array.isArray(permissionClaim)
+    ? permissionClaim as string[]
+    : [permissionClaim as string];
+});
 
   constructor(private http: HttpClient) {}
 
@@ -61,6 +73,10 @@ export class AuthService {
 
   hasRole(role: string): boolean {
     return this.roles().includes(role);
+  }
+
+  hasPermission(permission: string): boolean {
+    return this.permissions().includes(permission);
   }
 
   private setSession(token: string): void {

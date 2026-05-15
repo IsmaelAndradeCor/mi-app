@@ -16,6 +16,7 @@ export interface JwtPayload {
   unique_name?: string;
   nombreCompleto?: string;
   role?: string | string[];
+  permission?: string | string[];
   exp?: number;
   nbf?: number;
   [key: string]: unknown;

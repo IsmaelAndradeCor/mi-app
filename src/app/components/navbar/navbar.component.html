@@ -36,13 +36,16 @@
                     <div class="vr d-none d-lg-flex h-100 mx-lg-2" [ngClass]="{'text-white' : themeService.isDark(), 'text-black' : !themeService.isDark()}"></div> 
                     <hr class="d-lg-none my-2" [ngClass]="{'text-white-50' : themeService.isDark(), 'text-black-50' : !themeService.isDark()}"> 
                 </li>
-                <li class="nav-item d-flex align-items-center me-2" *ngIf="authService.isAuthenticated()">
+                <li class="nav-item d-flex align-items-center me-1" *ngIf="authService.isAuthenticated()">
                 <span class="nav-link disabled">{{ authService.nombreCompleto() }}</span>
                 </li>
-
+                <!-- <li class="nav-item py-2 py-lg-1 col-12 col-lg-auto"> 
+                    <div class="vr d-none d-lg-flex h-100 mx-lg-2" [ngClass]="{'text-white' : themeService.isDark(), 'text-black' : !themeService.isDark()}"></div> 
+                    <hr class="d-lg-none my-2" [ngClass]="{'text-white-50' : themeService.isDark(), 'text-black-50' : !themeService.isDark()}"> 
+                </li> -->
                 <li class="nav-item" *ngIf="authService.isAuthenticated()">
                 <button class="btn btn-outline-danger btn-sm" type="button" (click)="logout()">
-                    Cerrar sesión
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 </button>
                 </li>
             </ul>

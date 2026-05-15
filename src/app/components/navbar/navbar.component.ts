@@ -7,7 +7,7 @@ import { AuthService } from '../../core/auth/auth.service';
 interface NavItem {
   label: string;
   route: string;
-  roles: string[];
+  permissions: string[];
 }
 
 @Component({
@@ -21,19 +21,18 @@ export class NavbarComponent {
 
 
   navItems: NavItem[] = [
-    { label: 'Inicio', route: '/home', roles: ['Administrador', 'Empleado'] },
-    { label: 'Venta', route: '/venta/realizar-venta', roles: ['Administrador', 'Empleado'] },
-    { label: 'Productos', route: '/producto/listar-productos', roles: ['Administrador'] },
-    { label: 'Marcas', route: '/marca/listar-marcas', roles: ['Administrador'] },
-    { label: 'Categorias', route: '/categoria/listar-categorias', roles: ['Administrador'] },
-    { label: 'Unidades Medida', route: '/unidadMedida/listar-unidades-medida', roles: ['Administrador'] },
-    { label: 'Historial Ventas', route: '/venta/venta', roles: ['Administrador'] }
+    { label: 'Inicio', route: '/home', permissions: ['home.ver'] },
+    { label: 'Venta', route: '/venta/realizar-venta', permissions: ['ventas.realizar'] },
+    { label: 'Productos', route: '/producto/listar-productos', permissions: ['productos.ver'] },
+    { label: 'Marcas', route: '/marca/listar-marcas', permissions: ['marcas.ver'] },
+    { label: 'Categorias', route: '/categoria/listar-categorias', permissions: ['categorias.ver'] },
+    { label: 'Unidades Medida', route: '/unidadMedida/listar-unidades-medida', permissions: ['unidadesmedida.ver'] },
+    { label: 'Historial Ventas', route: '/venta/venta', permissions: ['ventas.historial.ver'] }
   ];
 
   visibleNavItems = computed(() => {
-    const userRoles = this.authService.roles();
     return this.navItems.filter(item =>
-      item.roles.some(role => userRoles.includes(role))
+      item.permissions.some(permission => this.authService.hasPermission(permission))
     );
   });
 
@@ -41,7 +40,10 @@ export class NavbarComponent {
     public themeService: ThemeService,
     public authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    console.log('Roles:', this.authService.roles());
+    console.log('Permissions:', this.authService.permissions());
+  }
 
   toggleTheme(): void {
     this.themeService.toggleTheme();
@@ -52,8 +54,4 @@ export class NavbarComponent {
     this.router.navigate(['/login']);
   }
 
-  esAdmin(): boolean {
-    console.log(this.authService)
-    return this.authService.hasRole('Administrador');
-  }
 }

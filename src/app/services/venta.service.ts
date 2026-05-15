@@ -36,7 +36,6 @@ export class VentaService {
     
     return this.http.post<number>(`${this.urlBase}/realizar_venta`, {
       folio: venta.folio,
-      idUsuario: 1,
       total: venta.total,
       detalle: detalleXml
     });

@@ -15,6 +15,7 @@ import { UnidadMedidaResponseDto } from '../../../models/dtos/responses/unidad-m
 import { ProveedorResponseDto } from '../../../models/dtos/responses/proveedor-response-dto';
 import { FormsModule } from '@angular/forms';
 import { CrearProductoComponent } from '../crear-producto/crear-producto.component';
+import { HasPermissionDirective } from '../../../core/directives/has-permission.directive';
 
 // // Simular API
 // const fetchProductos = async (): Promise<Producto[]> => {
@@ -23,7 +24,7 @@ import { CrearProductoComponent } from '../crear-producto/crear-producto.compone
 
 @Component({
   selector: 'app-listar-productos',
-  imports: [CommonModule, ActualizarProductoComponent, CrearProductoComponent, ConfirmarModalComponent, FormsModule],
+  imports: [CommonModule, ActualizarProductoComponent, CrearProductoComponent, ConfirmarModalComponent, FormsModule, HasPermissionDirective],
   templateUrl: './listar-productos.component.html',
   styleUrl: './listar-productos.component.scss'
 })
@@ -64,6 +65,7 @@ export class ListarProductosComponent implements OnInit {
     this.getUnidadesMedida();
     this.getProveedores();
   }
+
 
   getProductos(): void {
     // Convierte el arreglo a Map UNA SOLA VEZ al cargar

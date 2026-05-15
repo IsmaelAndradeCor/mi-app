@@ -38,12 +38,17 @@ export class LoginComponent {
       next: (response) => {
         this.cargando = false;
 
-        if (response.roles.includes('Administrador')) {
+        if (this.authService.hasPermission('home.ver')) {
           this.router.navigate(['/home']);
           return;
         }
 
-        this.router.navigate(['/venta/realizar-venta']);
+        if (this.authService.hasPermission('ventas.realizar')) {
+          this.router.navigate(['/venta/realizar-venta']);
+          return;
+        }
+
+        this.router.navigate(['/sin-acceso']);
       },
       error: () => {
         this.cargando = false;

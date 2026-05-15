@@ -1,5 +1,8 @@
-<h3>Crear Producto</h3>
-<div class="form-section">
+<div class="d-flex justify-content-start align-items-center mb-3 flex-wrap gap-3">
+    <h3 class="mb-0">Crear Producto</h3>
+    <button class="btn btn-primary btn-sm" type="button" (click)="expandirComponente()">Mostrar</button>
+</div>
+<div *ngIf="componenteExpandido" class="form-section">
     <div class="row mb-3">
         <div class="col-8">
             <div class="row row-cols-2 g-3">

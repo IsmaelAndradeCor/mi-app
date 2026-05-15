@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../../services/producto.service';
@@ -30,6 +30,8 @@ export class CrearProductoComponent implements OnInit {
     private unidadMedidaService: UnidadMedidaService
   ){}
 
+  // @Output() expandir = new EventEmitter<boolean>();
+
   ngOnInit(): void {
     this.getCategorias();
     this.getMarcas();
@@ -60,6 +62,8 @@ export class CrearProductoComponent implements OnInit {
   
   marcaTexto: string = '';
   selectedProveedor: number = 0;
+
+  componenteExpandido: boolean = false;
 
   getCategorias(): void {
     this.categoriaService.getCategorias().subscribe({
@@ -181,7 +185,6 @@ export class CrearProductoComponent implements OnInit {
     });
   }
 
-
   nombreProveedor(id: number): string {
     return this.proveedoresPorId.get(id)?.nombre ?? 'Proveedor no encontrado';
   }
@@ -209,4 +212,7 @@ export class CrearProductoComponent implements OnInit {
 
   }
 
+  expandirComponente(): void {
+    this.componenteExpandido = !this.componenteExpandido;
+  }
 }
